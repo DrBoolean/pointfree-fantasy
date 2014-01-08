@@ -1,0 +1,31 @@
+{
+  "name": "pointfree-fantasy",
+  "version": "0.0.1",
+  "description": "Point free wrappers for fantasy land js.",
+  "main": "pointfree.js",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DrBoolean/pointfree-fantasy.git"
+  },
+  "keywords": [
+    "functional",
+    "fantasy",
+    "pointfree",
+    "tacit"
+  ],
+  "author": "Loop/Recur",
+  "license": "MIT",
+  "dependencies": {
+    "lodash.curry": "*"
+  },
+  "devDependencies": {
+    "mocha": "~1.9.0",
+    "claire": "~0.4.1"
+  },
+  "bugs": {
+    "url": "https://github.com/DrBoolean/pointfree-fantasy/issues"
+  }
+}
