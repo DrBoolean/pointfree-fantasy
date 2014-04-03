@@ -1,84 +1,182 @@
+define([], function() {
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+module.exports = require('./pointfree');
+},{"./pointfree":27}],2:[function(require,module,exports){
+var curry = require('lodash.curry');
 var _flatten = function(xs) {
   return xs.reduce(function(a,b){return a.concat(b);}, []);
 };
 
-var fmap = function(f, xs) {
+var _fmap = function(f) {
+  var xs = this;
   return xs.map(function(x) { return f(x); }); //avoid index
 };
 
-var concat = function(xs,ys) { return xs.concat(ys); };
+Object.defineProperty(Array.prototype, 'fmap',{
+    value: _fmap,
+    writable: true,
+    configurable: true,
+    enumerable: false
+});
 
-var empty = function() { return []; };
+var _empty = function() { return []; };
 
-var chain = function(xs, f) { return _flatten(xs.map(f)); };
+Object.defineProperty(Array.prototype, 'empty',{
+    value: _empty,
+    writable: true,
+    configurable: true,
+    enumerable: false
+});
 
-var of = function(x) { return [x]; };
-var ap = function(a1, a2) {
+var _chain = function(f) { return _flatten(this.fmap(f)); };
+
+Object.defineProperty(Array.prototype, 'chain',{
+    value: _chain,
+    writable: true,
+    configurable: true,
+    enumerable: false
+});
+
+var _of = function(x) { return [x]; };
+
+Object.defineProperty(Array.prototype, 'of',{
+    value: _of,
+    writable: true,
+    configurable: true,
+    enumerable: false
+});
+
+var _ap = function(a2) {
+  var a1 = this;
   return _flatten(a1.map(function(f){
     return a2.map(function(a){ return f(a); })
   }));
 };
 
+Object.defineProperty(Array.prototype, 'ap',{
+    value: _ap,
+    writable: true,
+    configurable: true,
+    enumerable: false
+});
 
-module.exports = { fmap: fmap
-                 , of: of
-                 , ap: ap
-                 , concat: concat
-                 , empty: empty
-                 , chain: chain
-                 }
-
-},{}],2:[function(require,module,exports){
-var _K = function(x) { return function(y) { return x; } };
-
-var fmap = function(f, g) {
-  return function(x) { return f(g(x)) };
+var _traverse = function(f) {
+  var xs = this;
+  var cons_f = function(ys, x){
+    var z = f(x).map(curry(function(x,y){ return y.concat(x); }));
+    ys = ys || z.of([]);
+    return z.ap(ys);
+  }
+  return xs.reduce(cons_f, null);
 };
 
-var _concat = function(f, g) {
+Object.defineProperty(Array.prototype, 'traverse',{
+    value: _traverse,
+    writable: true,
+    configurable: true,
+    enumerable: false
+});
+
+var _foldl = function(f, acc) {
+  return this.reduce(f, acc);
+}
+
+Object.defineProperty(Array.prototype, 'foldl',{
+    value: _foldl,
+    writable: true,
+    configurable: true,
+    enumerable: false
+});
+
+
+},{"lodash.curry":5}],3:[function(require,module,exports){
+var _K = function(x) { return function(y) { return x; } };
+
+var _fmap = function(g) {
+  var f = this;
+  return function(x) { return g(f(x)) };
+};
+
+Object.defineProperty(Function.prototype, 'fmap',{
+    value: _fmap,
+    writable: true,
+    configurable: true,
+    enumerable: false
+});
+
+var _concat = function(g) {
+  var f = this;
   return function() {
-    return concat( f.apply(this, arguments)
-                 , g.apply(this, arguments)
-                 );
+    return f.apply(this, arguments).concat(g.apply(this, arguments))
   }
 };
 
-var empty = function() {
-  return _K({ concat: function(f, g) { return concat(empty(g), g); } });
+Object.defineProperty(Function.prototype, 'concat',{
+    value: _concat,
+    writable: true,
+    configurable: true,
+    enumerable: false
+});
+
+var _empty = function() {
+  return _K({ concat: function(g) { return g.empty().concat(g); } });
 };
 
-var chain = function(f, g) {
+Object.defineProperty(Function.prototype, 'empty',{
+    value: _empty,
+    writable: true,
+    configurable: true,
+    enumerable: false
+});
+
+var _chain = function(g) {
+  var f = this;
   return function(x) {
     return g(f(x), x);
   };
 };
 
-var of = _K;
-var ap = function(f, g) {
+Object.defineProperty(Function.prototype, 'chain',{
+    value: _chain,
+    writable: true,
+    configurable: true,
+    enumerable: false
+});
+
+var _of = _K;
+
+Object.defineProperty(Function.prototype, 'of',{
+    value: _of,
+    writable: true,
+    configurable: true,
+    enumerable: false
+});
+
+var _ap = function(g) {
+  var f = this;
   return function(x) {
     return f(x)(g(x));
   }
 };
 
-module.exports = { fmap: fmap
-                 , of: of
-                 , ap: ap
-                 , concat: _concat
-                 , empty: empty
-                 , chain: chain
-                 }
-
-},{}],3:[function(require,module,exports){
-var concat = function(xs,ys) { return xs.concat(ys); };
-
-var empty = function() { return ""; };
-
-module.exports = { concat: concat
-                 , empty: empty
-                 }
+Object.defineProperty(Function.prototype, 'ap',{
+    value: _ap,
+    writable: true,
+    configurable: true,
+    enumerable: false
+});
 
 },{}],4:[function(require,module,exports){
+var _empty = function() { return ""; };
+
+Object.defineProperty(String.prototype, 'empty',{
+    value: _empty,
+    writable: true,
+    configurable: true,
+    enumerable: false
+});
+
+},{}],5:[function(require,module,exports){
 /**
  * Lo-Dash 2.4.1 (Custom Build) <http://lodash.com/>
  * Build: `lodash modularize modern exports="npm" -o ./npm/`
@@ -124,7 +222,7 @@ function curry(func, arity) {
 
 module.exports = curry;
 
-},{"lodash._createwrapper":5}],5:[function(require,module,exports){
+},{"lodash._createwrapper":6}],6:[function(require,module,exports){
 /**
  * Lo-Dash 2.4.1 (Custom Build) <http://lodash.com/>
  * Build: `lodash modularize modern exports="npm" -o ./npm/`
@@ -232,7 +330,7 @@ function createWrapper(func, bitmask, partialArgs, partialRightArgs, thisArg, ar
 
 module.exports = createWrapper;
 
-},{"lodash._basebind":6,"lodash._basecreatewrapper":15,"lodash._slice":24,"lodash.isfunction":25}],6:[function(require,module,exports){
+},{"lodash._basebind":7,"lodash._basecreatewrapper":16,"lodash._slice":25,"lodash.isfunction":26}],7:[function(require,module,exports){
 /**
  * Lo-Dash 2.4.1 (Custom Build) <http://lodash.com/>
  * Build: `lodash modularize modern exports="npm" -o ./npm/`
@@ -296,7 +394,7 @@ function baseBind(bindData) {
 
 module.exports = baseBind;
 
-},{"lodash._basecreate":7,"lodash._setbinddata":10,"lodash._slice":24,"lodash.isobject":13}],7:[function(require,module,exports){
+},{"lodash._basecreate":8,"lodash._setbinddata":11,"lodash._slice":25,"lodash.isobject":14}],8:[function(require,module,exports){
 var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};/**
  * Lo-Dash 2.4.1 (Custom Build) <http://lodash.com/>
  * Build: `lodash modularize modern exports="npm" -o ./npm/`
@@ -340,7 +438,7 @@ if (!nativeCreate) {
 
 module.exports = baseCreate;
 
-},{"lodash._isnative":8,"lodash.isobject":13,"lodash.noop":9}],8:[function(require,module,exports){
+},{"lodash._isnative":9,"lodash.isobject":14,"lodash.noop":10}],9:[function(require,module,exports){
 /**
  * Lo-Dash 2.4.1 (Custom Build) <http://lodash.com/>
  * Build: `lodash modularize modern exports="npm" -o ./npm/`
@@ -376,7 +474,7 @@ function isNative(value) {
 
 module.exports = isNative;
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 /**
  * Lo-Dash 2.4.1 (Custom Build) <http://lodash.com/>
  * Build: `lodash modularize modern exports="npm" -o ./npm/`
@@ -404,7 +502,7 @@ function noop() {
 
 module.exports = noop;
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 /**
  * Lo-Dash 2.4.1 (Custom Build) <http://lodash.com/>
  * Build: `lodash modularize modern exports="npm" -o ./npm/`
@@ -449,11 +547,11 @@ var setBindData = !defineProperty ? noop : function(func, value) {
 
 module.exports = setBindData;
 
-},{"lodash._isnative":11,"lodash.noop":12}],11:[function(require,module,exports){
-module.exports=require(8)
-},{}],12:[function(require,module,exports){
+},{"lodash._isnative":12,"lodash.noop":13}],12:[function(require,module,exports){
 module.exports=require(9)
 },{}],13:[function(require,module,exports){
+module.exports=require(10)
+},{}],14:[function(require,module,exports){
 /**
  * Lo-Dash 2.4.1 (Custom Build) <http://lodash.com/>
  * Build: `lodash modularize modern exports="npm" -o ./npm/`
@@ -494,7 +592,7 @@ function isObject(value) {
 
 module.exports = isObject;
 
-},{"lodash._objecttypes":14}],14:[function(require,module,exports){
+},{"lodash._objecttypes":15}],15:[function(require,module,exports){
 /**
  * Lo-Dash 2.4.1 (Custom Build) <http://lodash.com/>
  * Build: `lodash modularize modern exports="npm" -o ./npm/`
@@ -516,7 +614,7 @@ var objectTypes = {
 
 module.exports = objectTypes;
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 /**
  * Lo-Dash 2.4.1 (Custom Build) <http://lodash.com/>
  * Build: `lodash modularize modern exports="npm" -o ./npm/`
@@ -596,23 +694,23 @@ function baseCreateWrapper(bindData) {
 
 module.exports = baseCreateWrapper;
 
-},{"lodash._basecreate":16,"lodash._setbinddata":19,"lodash._slice":24,"lodash.isobject":22}],16:[function(require,module,exports){
-arguments[4][7][0].apply(exports,arguments)
-},{"lodash._isnative":17,"lodash.isobject":22,"lodash.noop":18}],17:[function(require,module,exports){
-module.exports=require(8)
-},{}],18:[function(require,module,exports){
+},{"lodash._basecreate":17,"lodash._setbinddata":20,"lodash._slice":25,"lodash.isobject":23}],17:[function(require,module,exports){
+arguments[4][8][0].apply(exports,arguments)
+},{"lodash._isnative":18,"lodash.isobject":23,"lodash.noop":19}],18:[function(require,module,exports){
 module.exports=require(9)
 },{}],19:[function(require,module,exports){
 module.exports=require(10)
-},{"lodash._isnative":20,"lodash.noop":21}],20:[function(require,module,exports){
-module.exports=require(8)
-},{}],21:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
+module.exports=require(11)
+},{"lodash._isnative":21,"lodash.noop":22}],21:[function(require,module,exports){
 module.exports=require(9)
 },{}],22:[function(require,module,exports){
-module.exports=require(13)
-},{"lodash._objecttypes":23}],23:[function(require,module,exports){
+module.exports=require(10)
+},{}],23:[function(require,module,exports){
 module.exports=require(14)
-},{}],24:[function(require,module,exports){
+},{"lodash._objecttypes":24}],24:[function(require,module,exports){
+module.exports=require(15)
+},{}],25:[function(require,module,exports){
 /**
  * Lo-Dash 2.4.1 (Custom Build) <http://lodash.com/>
  * Build: `lodash modularize modern exports="npm" -o ./npm/`
@@ -652,7 +750,7 @@ function slice(array, start, end) {
 
 module.exports = slice;
 
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 /**
  * Lo-Dash 2.4.1 (Custom Build) <http://lodash.com/>
  * Build: `lodash modularize modern exports="npm" -o ./npm/`
@@ -681,7 +779,7 @@ function isFunction(value) {
 
 module.exports = isFunction;
 
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 var curry = require('lodash.curry');
 
 var BUILT_INS = { 'array': require('./instances/array')
@@ -689,21 +787,14 @@ var BUILT_INS = { 'array': require('./instances/array')
                 , 'string': require('./instances/string')
                 }
 
-var _getNamedType = function(x) {
-  return Object.prototype.toString.call( x ).match(/\S+(.*?)]/)[1].substr(1).toLowerCase();
-};
-
-var _getInstance = function(fn_name, x) {
-  var t = _getNamedType(x);
-  return BUILT_INS[t] && BUILT_INS[t][fn_name];
-};
-
 var _groupsOf = curry(function(n, xs) {
   if(!xs.length) return [];
   return [xs.slice(0, n)].concat(_groupsOf(n, xs.slice(n, xs.length)));
 });
 
 var _compose = curry(function(f,g,x) { return f(g(x)) });
+
+var I = function(x){ return x; }
 
 // f . g . h == compose(f, g, h)
 var toAssociativeCommaInfix = function(fn) {
@@ -727,31 +818,27 @@ var Pointy = {};
 var id = function(x) { return x; }
 
 var fmap = curry(function(f, u) {
-  var builtIn = _getInstance('fmap', u);
-  return builtIn ? builtIn(f, u) : (u.fmap && u.fmap(f)) || u.map(f);
+  return (u.fmap && u.fmap(f)) || u.map(f);
 });
 
 var of = curry(function(f, a) {
-  var builtIn = _getInstance('of', a);
-  return builtIn ? builtIn(f, a) : a.of(f);
+  return a.of(f);
 });
 
 var ap = curry(function(a1, a2) {
-  var builtIn = _getInstance('ap', a1)
-  return builtIn ? builtIn(a1, a2) : a1.ap(a2);
+  return a1.ap(a2);
 });
 
 var liftA2 = curry(function(f, x, y) {
-	return ap(fmap(f, x), y);
+  return fmap(f,x).ap(y);
 });
 
 var liftA3 = curry(function(f, x, y, z) {
-  return ap(ap(fmap(f, x), y), z);
+  return fmap(f, x).ap(y).ap(z);
 });
 
 var chain = curry(function(mv, f) {
-  var builtIn = _getInstance('chain', mv);
-  return builtIn ? builtIn(mv, f) : mv.chain(f);
+  return mv.chain(f);
 });
 
 var mjoin = function(mmv) {
@@ -759,19 +846,46 @@ var mjoin = function(mmv) {
 };
 
 var concat = curry(function(x, y) {
-  var builtIn = _getInstance('concat', x);
-  return builtIn ? builtIn(x,y) : x.concat(y);
+  return x.concat(y);
 });
 
 var empty = function(x) {
-  var builtIn = _getInstance('empty', x);
-  return builtIn ? builtIn(x) : x.empty();
+  return x.empty();
+};
+
+var mappend = function(x,y) {
+  console.log('x', x, 'y', y);
+  return concat(x,y)
 };
 
 var mconcat = function(xs) {
 	if(!xs[0]) return xs;
   var e = empty(xs[0]);
   return xs.reduce(mappend, e);
+};
+
+var sequenceA = curry(function(fctr) {
+  return fctr.traverse(id);
+});
+
+var traverse = curry(function(f, fctr) {
+  return compose(sequenceA, fmap(f))(fctr);
+});
+
+var foldMap = curry(function(f, fldable) {
+  return fldable.foldl(function(acc, x) {
+    var r = f(x)
+    acc = acc || r.empty();
+    return acc.concat(r);
+  })
+});
+
+var fold = foldMap(I)
+
+var toList = function(x) {
+  return x.foldl(function(acc, y) {
+    return [y].concat(acc);
+  }, []);
 };
 
 var expose = function(env) {
@@ -796,8 +910,13 @@ Pointy.mjoin = mjoin;
 Pointy.empty = empty;
 Pointy.mempty = empty;
 Pointy.concat = concat;
-Pointy.mappend = concat;
+Pointy.mappend = mappend;
 Pointy.mconcat = mconcat;
+Pointy.sequenceA = sequenceA;
+Pointy.traverse = traverse;
+Pointy.foldMap = foldMap;
+Pointy.fold = fold;
+Pointy.toList = toList;
 Pointy.expose = expose;
 
 
@@ -807,4 +926,7 @@ if(typeof window == "object") {
   PointFree = Pointy;
 }
 
-},{"./instances/array":1,"./instances/function":2,"./instances/string":3,"lodash.curry":4}]},{},[26])
+},{"./instances/array":2,"./instances/function":3,"./instances/string":4,"lodash.curry":5}]},{},[1])
+
+return PointFree;
+});
