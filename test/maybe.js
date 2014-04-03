@@ -94,5 +94,10 @@ describe('Maybe', function(){
       var f = function(x){ return [x]; }
       assert.deepEqual(traverse(f, Just(1)), [Just(1)]) 
     })
+
+    it('is foldable', function() {
+      assert.deepEqual(foldMap(concat([1,2]), Just([3,4])), [1,2,3,4])
+      assert.deepEqual(toList(Just(3)), [3])
+    });
   });
 });

@@ -55,10 +55,16 @@ Just.prototype.chain = function(f) {
   return f(this.val);
 }
 Nothing.prototype.traverse = function(f) {
-  return Nothing();
+  return [Nothing()]; //how to get pure if we can't call f? [] for now
 }
 Just.prototype.traverse = function(f) {
   return f(this.val).map(Just);
+};
+Nothing.prototype.foldl = function(f) {
+  return [] // same prob as traverse - need to run f() to get correct empty
+};
+Just.prototype.foldl = function(f, acc) {
+  return f(acc, this.val); 
 };
 
 module.exports = Maybe;

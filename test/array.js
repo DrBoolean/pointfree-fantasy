@@ -4,6 +4,7 @@ require('../pointfree').expose(global)
 var assert = require("assert")
   , quickCheckLaws = require('./helper').quickCheckLaws
   , curry = require('lodash.curry')
+  , monoids = require('../instances/monoids')
   , claire = require('claire')
   , Maybe = require('../instances/maybe')
   , _ = claire.data
@@ -23,4 +24,8 @@ describe('Array', function(){
     var xs = [1,2];
     assert.deepEqual(traverse(f, xs), Maybe([1,2])) 
   })
+
+  it('is foldable', function() {
+    assert.deepEqual(foldMap(monoids.Sum, [1,2,3]), monoids.Sum(6))
+  });
 });

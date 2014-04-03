@@ -12,6 +12,8 @@ var _groupsOf = curry(function(n, xs) {
 
 var _compose = curry(function(f,g,x) { return f(g(x)) });
 
+var I = function(x){ return x; }
+
 // f . g . h == compose(f, g, h)
 var toAssociativeCommaInfix = function(fn) {
   return function() {
@@ -88,6 +90,22 @@ var traverse = curry(function(f, fctr) {
   return compose(sequenceA, fmap(f))(fctr);
 });
 
+var foldMap = curry(function(f, fldable) {
+  return fldable.foldl(function(acc, x) {
+    var r = f(x)
+    acc = acc || r.empty();
+    return acc.concat(r);
+  })
+});
+
+var fold = foldMap(I)
+
+var toList = function(x) {
+  return x.foldl(function(acc, y) {
+    return [y].concat(acc);
+  }, []);
+};
+
 var expose = function(env) {
   var f;
   for (f in Pointy) {
@@ -114,6 +132,9 @@ Pointy.mappend = mappend;
 Pointy.mconcat = mconcat;
 Pointy.sequenceA = sequenceA;
 Pointy.traverse = traverse;
+Pointy.foldMap = foldMap;
+Pointy.fold = fold;
+Pointy.toList = toList;
 Pointy.expose = expose;
 
 

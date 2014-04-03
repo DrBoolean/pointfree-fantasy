@@ -73,3 +73,14 @@ Object.defineProperty(Array.prototype, 'traverse',{
     enumerable: false
 });
 
+var _foldl = function(f, acc) {
+  return this.reduce(f, acc);
+}
+
+Object.defineProperty(Array.prototype, 'foldl',{
+    value: _foldl,
+    writable: true,
+    configurable: true,
+    enumerable: false
+});
+
