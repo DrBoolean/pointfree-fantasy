@@ -22,6 +22,7 @@ describe('Function', function(){
   describe("Monoid", function() {
     it('runs the functions then concats the values together', function() {
       assert.equal(mappend(f, g)(' bla '), ' bla hello bla world')
+      assert.equal(mconcat([f, g])(' bla '), ' bla hello bla world')
     });
   });
 

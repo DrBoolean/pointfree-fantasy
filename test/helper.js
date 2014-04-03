@@ -9,7 +9,6 @@ var add = curry(function(x, y) { return x + y; });
 
 var semigroupAssocTest = function(gen) {
   return forAll(gen, gen, gen).satisfy(function(a, b, c) {
-    console.log('a', a, 'b', b, 'c', c)
     assert.deepEqual(mappend(mappend(a, b), c), mappend(a, mappend(b, c)));
     return true;
   }).asTest({times: 100});

@@ -54,5 +54,11 @@ Nothing.prototype.chain = function(f) {
 Just.prototype.chain = function(f) {
   return f(this.val);
 }
+Nothing.prototype.traverse = function(f) {
+  return Nothing();
+}
+Just.prototype.traverse = function(f) {
+  return f(this.val).map(Just);
+};
 
 module.exports = Maybe;

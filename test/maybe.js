@@ -89,4 +89,10 @@ describe('Maybe', function(){
       assert.deepEqual(result, Just(7));
     })
   });
+  describe('Other', function() {
+    it('is traversable', function() {
+      var f = function(x){ return [x]; }
+      assert.deepEqual(traverse(f, Just(1)), [Just(1)]) 
+    })
+  });
 });

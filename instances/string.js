@@ -1,7 +1,8 @@
-var concat = function(xs,ys) { return xs.concat(ys); };
+var _empty = function() { return ""; };
 
-var empty = function() { return ""; };
-
-module.exports = { concat: concat
-                 , empty: empty
-                 }
+Object.defineProperty(String.prototype, 'empty',{
+    value: _empty,
+    writable: true,
+    configurable: true,
+    enumerable: false
+});

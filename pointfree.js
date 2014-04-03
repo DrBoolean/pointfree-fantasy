@@ -5,15 +5,6 @@ var BUILT_INS = { 'array': require('./instances/array')
                 , 'string': require('./instances/string')
                 }
 
-var _getNamedType = function(x) {
-  return Object.prototype.toString.call( x ).match(/\S+(.*?)]/)[1].substr(1).toLowerCase();
-};
-
-var _getInstance = function(fn_name, x) {
-  var t = _getNamedType(x);
-  return BUILT_INS[t] && BUILT_INS[t][fn_name];
-};
-
 var _groupsOf = curry(function(n, xs) {
   if(!xs.length) return [];
   return [xs.slice(0, n)].concat(_groupsOf(n, xs.slice(n, xs.length)));
@@ -43,31 +34,27 @@ var Pointy = {};
 var id = function(x) { return x; }
 
 var fmap = curry(function(f, u) {
-  var builtIn = _getInstance('fmap', u);
-  return builtIn ? builtIn(f, u) : (u.fmap && u.fmap(f)) || u.map(f);
+  return (u.fmap && u.fmap(f)) || u.map(f);
 });
 
 var of = curry(function(f, a) {
-  var builtIn = _getInstance('of', a);
-  return builtIn ? builtIn(f, a) : a.of(f);
+  return a.of(f);
 });
 
 var ap = curry(function(a1, a2) {
-  var builtIn = _getInstance('ap', a1)
-  return builtIn ? builtIn(a1, a2) : a1.ap(a2);
+  return a1.ap(a2);
 });
 
 var liftA2 = curry(function(f, x, y) {
-	return ap(fmap(f, x), y);
+  return fmap(f,x).ap(y);
 });
 
 var liftA3 = curry(function(f, x, y, z) {
-  return ap(ap(fmap(f, x), y), z);
+  return fmap(f, x).ap(y).ap(z);
 });
 
 var chain = curry(function(mv, f) {
-  var builtIn = _getInstance('chain', mv);
-  return builtIn ? builtIn(mv, f) : mv.chain(f);
+  return mv.chain(f);
 });
 
 var mjoin = function(mmv) {
@@ -75,13 +62,16 @@ var mjoin = function(mmv) {
 };
 
 var concat = curry(function(x, y) {
-  var builtIn = _getInstance('concat', x);
-  return builtIn ? builtIn(x,y) : x.concat(y);
+  return x.concat(y);
 });
 
 var empty = function(x) {
-  var builtIn = _getInstance('empty', x);
-  return builtIn ? builtIn(x) : x.empty();
+  return x.empty();
+};
+
+var mappend = function(x,y) {
+  console.log('x', x, 'y', y);
+  return concat(x,y)
 };
 
 var mconcat = function(xs) {
@@ -89,6 +79,14 @@ var mconcat = function(xs) {
   var e = empty(xs[0]);
   return xs.reduce(mappend, e);
 };
+
+var sequenceA = curry(function(fctr) {
+  return fctr.traverse(id);
+});
+
+var traverse = curry(function(f, fctr) {
+  return compose(sequenceA, fmap(f))(fctr);
+});
 
 var expose = function(env) {
   var f;
@@ -112,8 +110,10 @@ Pointy.mjoin = mjoin;
 Pointy.empty = empty;
 Pointy.mempty = empty;
 Pointy.concat = concat;
-Pointy.mappend = concat;
+Pointy.mappend = mappend;
 Pointy.mconcat = mconcat;
+Pointy.sequenceA = sequenceA;
+Pointy.traverse = traverse;
 Pointy.expose = expose;
 
 

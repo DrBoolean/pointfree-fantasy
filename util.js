@@ -27,43 +27,6 @@ var subClass = function(superclass, constructr) {
 }
 exports.subClass = subClass;
 
-var toArray = function(x) {
-  return Array.prototype.slice.call(x);
-}
-
-var curry = function (fn /* variadic number of args */) {
-  var args = Array.prototype.slice.call(arguments, 1);
-  var f = function () {
-    return fn.apply(this, args.concat(toArray(arguments)));
-  };
-  return f;
-};
-
-var autoCurry = function (fn, numArgs) {
-  numArgs = numArgs || fn.length;
-  var f = function () {
-    if (arguments.length < numArgs) {
-      return numArgs - arguments.length > 0 ?
-        autoCurry(curry.apply(this, [fn].concat(toArray(arguments))),
-            numArgs - arguments.length) :
-        curry.apply(this, [fn].concat(toArray(arguments)));
-    }
-    else {
-      return fn.apply(this, arguments);
-    }
-  };
-  f.toString = function(){ return fn.toString(); };
-  f.curried = true;
-  f.fn = fn;
-  f.arity = fn.length;
-  return f;
-};
-exports.autoCurry = autoCurry;
-Function.prototype.autoCurry = function(n) {
-  return autoCurry(this, n);
-}
-
-
 var K = function(x){return function(){return x;};};
 exports.K = K;var I = function(x){return x;};
 exports.I = I;
