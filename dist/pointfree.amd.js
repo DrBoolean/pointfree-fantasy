@@ -816,6 +816,7 @@ var compose = toAssociativeCommaInfix(_compose);
 var Pointy = {};
 
 var id = function(x) { return x; }
+var K = function(x) { return function(){ return x; } }
 
 var fmap = curry(function(f, u) {
   return (u.fmap && u.fmap(f)) || u.map(f);
@@ -841,8 +842,12 @@ var chain = curry(function(mv, f) {
   return mv.chain(f);
 });
 
+var flatMap = curry(function(f, mv) {
+  return mv.chain(f);
+});
+
 var mjoin = function(mmv) {
-	return chain(mmv, id);
+  return chain(mmv, id);
 };
 
 var concat = curry(function(x, y) {
@@ -853,15 +858,10 @@ var empty = function(x) {
   return x.empty();
 };
 
-var mappend = function(x,y) {
-  console.log('x', x, 'y', y);
-  return concat(x,y)
-};
-
 var mconcat = function(xs) {
-	if(!xs[0]) return xs;
+  if(!xs[0]) return xs;
   var e = empty(xs[0]);
-  return xs.reduce(mappend, e);
+  return xs.reduce(concat, e);
 };
 
 var sequenceA = curry(function(fctr) {
@@ -897,7 +897,8 @@ var expose = function(env) {
   }
 }
 
-Pointy.id = id;
+Pointy.I = id;
+Pointy.K = K;
 Pointy.compose = compose;
 Pointy.fmap = fmap;
 Pointy.of = of;
@@ -905,12 +906,12 @@ Pointy.ap = ap;
 Pointy.liftA2 = liftA2;
 Pointy.liftA3 = liftA3;
 Pointy.chain = chain;
-Pointy.mbind = chain;
+Pointy.flatMap = flatMap;
 Pointy.mjoin = mjoin;
 Pointy.empty = empty;
 Pointy.mempty = empty;
 Pointy.concat = concat;
-Pointy.mappend = mappend;
+Pointy.mappend = concat;
 Pointy.mconcat = mconcat;
 Pointy.sequenceA = sequenceA;
 Pointy.traverse = traverse;
@@ -927,6 +928,5 @@ if(typeof window == "object") {
 }
 
 },{"./instances/array":2,"./instances/function":3,"./instances/string":4,"lodash.curry":5}]},{},[1])
-
 return PointFree;
 });
