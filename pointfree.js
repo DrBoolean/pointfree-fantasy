@@ -19,29 +19,25 @@ var toAssociativeCommaInfix = function(fn) {
   return function() {
     var fns = [].slice.call(arguments)
     return function() {
-      return _groupsOf(2, fns).reverse().map(function(g) {      
+      return _groupsOf(2, fns).reverse().map(function(g) {
         return (g.length > 1) ? fn.apply(this,g) : g[0];
       }).reduce(function(x, f) {
         return [f.apply(f,x)];
       }, arguments)[0];
-    };    
+    };
   };
 };
 
 var compose = toAssociativeCommaInfix(_compose);
 
 
-var Pointy = {};
+var pointy = {};
 
 var id = function(x) { return x; }
 var K = function(x) { return function(){ return x; } }
 
 var fmap = curry(function(f, u) {
-  return (u.fmap && u.fmap(f)) || u.map(f);
-});
-
-var of = curry(function(f, a) {
-  return a.of(f);
+  return u.fmap ? u.fmap(f) : u.map(f);
 });
 
 var ap = curry(function(a1, a2) {
@@ -65,21 +61,15 @@ var flatMap = curry(function(f, mv) {
 });
 
 var mjoin = function(mmv) {
-	return chain(mmv, id);
+  return chain(mmv, id);
 };
 
 var concat = curry(function(x, y) {
   return x.concat(y);
 });
 
-var empty = function(x) {
-  return x.empty();
-};
-
-var mconcat = function(xs) {
-	if(!xs[0]) return xs;
-  var e = empty(xs[0]);
-  return xs.reduce(concat, e);
+var mconcat = function(xs, empty) {
+  return xs.length ? xs.reduce(concat) : empty();
 };
 
 var sequenceA = curry(function(fctr) {
@@ -108,39 +98,36 @@ var toList = function(x) {
 
 var expose = function(env) {
   var f;
-  for (f in Pointy) {
-    if (f !== 'expose' && Pointy.hasOwnProperty(f)) {
-      env[f] = Pointy[f];
+  for (f in pointy) {
+    if (f !== 'expose' && pointy.hasOwnProperty(f)) {
+      env[f] = pointy[f];
     }
   }
 }
 
-Pointy.I = id;
-Pointy.K = K;
-Pointy.compose = compose;
-Pointy.fmap = fmap;
-Pointy.of = of;
-Pointy.ap = ap;
-Pointy.liftA2 = liftA2;
-Pointy.liftA3 = liftA3;
-Pointy.chain = chain;
-Pointy.flatMap = flatMap;
-Pointy.mjoin = mjoin;
-Pointy.empty = empty;
-Pointy.mempty = empty;
-Pointy.concat = concat;
-Pointy.mappend = concat;
-Pointy.mconcat = mconcat;
-Pointy.sequenceA = sequenceA;
-Pointy.traverse = traverse;
-Pointy.foldMap = foldMap;
-Pointy.fold = fold;
-Pointy.toList = toList;
-Pointy.expose = expose;
+pointy.I = id;
+pointy.K = K;
+pointy.compose = compose;
+pointy.fmap = fmap;
+pointy.map = fmap;
+pointy.ap = ap;
+pointy.liftA2 = liftA2;
+pointy.liftA3 = liftA3;
+pointy.chain = chain;
+pointy.flatMap = flatMap;
+pointy.mjoin = mjoin;
+pointy.concat = concat;
+pointy.mappend = concat;
+pointy.mconcat = mconcat;
+pointy.sequenceA = sequenceA;
+pointy.traverse = traverse;
+pointy.foldMap = foldMap;
+pointy.fold = fold;
+pointy.toList = toList;
+pointy.expose = expose;
 
-
-module.exports = Pointy;
+module.exports = pointy;
 
 if(typeof window == "object") {
-  PointFree = Pointy;
+  pointfree = pointy;
 }

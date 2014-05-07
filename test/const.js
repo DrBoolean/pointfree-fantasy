@@ -18,9 +18,9 @@ describe('Const', function(){
   quickCheckLaws({ 'Functor': ConstGen });
 
   describe('Functor', function(){
-    it('ignores fmap entirely', function(){
+    it('ignores map entirely', function(){
       var someFn = function(x) { return x + 'this will not happen'; };
-      assert.deepEqual(fmap(someFn, Const('hi')), Const('hi'));
+      assert.deepEqual(map(someFn, Const('hi')), Const('hi'));
     });
   });
 

@@ -1,6 +1,5 @@
 require('../pointfree').expose(global)
 
-
 var Maybe = require('../instances/maybe')
   , Just = Maybe.Just
   , Nothing = Maybe.Nothing
@@ -38,8 +37,8 @@ describe('Maybe', function(){
   });
 
   describe('Functor', function(){
-    it('works with fmap', function(){
-      var getStreet = compose(fmap(add('my email is ')), safeGet('email'));
+    it('works with map', function(){
+      var getStreet = compose(map(add('my email is ')), safeGet('email'));
       assert.deepEqual(getStreet(user), Just('my email is sally@test.com'));
     });
   });
@@ -64,13 +63,13 @@ describe('Maybe', function(){
 
   describe('Monad', function(){
     var flatSafeTraverseStreetName = compose( mjoin
-                                            , fmap(safeGet('name'))
+                                            , map(safeGet('name'))
                                             , mjoin
-                                            , fmap(safeGet('street'))
+                                            , map(safeGet('street'))
                                             , safeGet('address')
                                             );
 
-    it('flattens the nested fmaps', function(){
+    it('flattens the nested maps', function(){
       var user = {email: "sally@test.com", address: {street: {number: 23, name: "Winston"}}}
       assert.deepEqual(flatSafeTraverseStreetName(user), Just('Winston'));
     })
@@ -81,8 +80,8 @@ describe('Maybe', function(){
     })
 
     it('binds a value to the function', function(){
-      var result = mbind(Just(3), function(three){
-        return mbind(Just(4), function(four){
+      var result = chain(Just(3), function(three){
+        return chain(Just(4), function(four){
           return Just(three + four);
         })
       });

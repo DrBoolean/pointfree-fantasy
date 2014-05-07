@@ -9,37 +9,37 @@ var _fmap = function(f) {
 };
 
 Object.defineProperty(Array.prototype, 'fmap',{
-    value: _fmap,
-    writable: true,
-    configurable: true,
-    enumerable: false
+  value: _fmap,
+  writable: true,
+  configurable: true,
+  enumerable: false
 });
 
 var _empty = function() { return []; };
 
 Object.defineProperty(Array.prototype, 'empty',{
-    value: _empty,
-    writable: true,
-    configurable: true,
-    enumerable: false
+  value: _empty,
+  writable: true,
+  configurable: true,
+  enumerable: false
 });
 
 var _chain = function(f) { return _flatten(this.fmap(f)); };
 
 Object.defineProperty(Array.prototype, 'chain',{
-    value: _chain,
-    writable: true,
-    configurable: true,
-    enumerable: false
+  value: _chain,
+  writable: true,
+  configurable: true,
+  enumerable: false
 });
 
 var _of = function(x) { return [x]; };
 
 Object.defineProperty(Array.prototype, 'of',{
-    value: _of,
-    writable: true,
-    configurable: true,
-    enumerable: false
+  value: _of,
+  writable: true,
+  configurable: true,
+  enumerable: false
 });
 
 var _ap = function(a2) {
@@ -50,10 +50,10 @@ var _ap = function(a2) {
 };
 
 Object.defineProperty(Array.prototype, 'ap',{
-    value: _ap,
-    writable: true,
-    configurable: true,
-    enumerable: false
+  value: _ap,
+  writable: true,
+  configurable: true,
+  enumerable: false
 });
 
 var _traverse = function(f) {
@@ -67,10 +67,10 @@ var _traverse = function(f) {
 };
 
 Object.defineProperty(Array.prototype, 'traverse',{
-    value: _traverse,
-    writable: true,
-    configurable: true,
-    enumerable: false
+  value: _traverse,
+  writable: true,
+  configurable: true,
+  enumerable: false
 });
 
 var _foldl = function(f, acc) {
@@ -78,9 +78,8 @@ var _foldl = function(f, acc) {
 }
 
 Object.defineProperty(Array.prototype, 'foldl',{
-    value: _foldl,
-    writable: true,
-    configurable: true,
-    enumerable: false
+  value: _foldl,
+  writable: true,
+  configurable: true,
+  enumerable: false
 });
-
