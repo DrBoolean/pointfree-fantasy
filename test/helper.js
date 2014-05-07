@@ -23,7 +23,7 @@ var monoidIdentityTest = function(gen) {
 
 var functorIdentity = function(gen) {
   return forAll(gen).satisfy(function(m) {
-    assert.deepEqual(fmap(id, m), id(m));
+    assert.deepEqual(fmap(I, m), I(m));
     return true;
   }).asTest({times: 100})
 };
@@ -39,7 +39,7 @@ var functorComp = function(gen) {
 
 var applicativeIdentity = function(gen) {
   return forAll(gen).satisfy(function(m) {
-    assert.deepEqual(ap(of(id, m), m), m);
+    assert.deepEqual(ap(of(I, m), m), m);
     return true;
   }).asTest({times: 100})
 };
@@ -76,7 +76,7 @@ var monadAssoc = function(gen) {
       var f = function(x){ return of(add('nest1', x), m)}
         , g = function(x){ return of(add('nest2', x), m)}
         , h = function(x){ return of(add('nest3', x), m)}
-        , mcompose_ = curry(function(f, g, x) { return mbind(g(x), f); })
+        , mcompose_ = curry(function(f, g, x) { return chain(g(x), f); })
         ;
       assert.deepEqual(mcompose_(f, mcompose_(g, h))(m), mcompose_(mcompose_(f, g), h)(m));
       return true;

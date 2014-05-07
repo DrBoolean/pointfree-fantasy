@@ -1,6 +1,5 @@
 require('../pointfree').expose(global)
 
-
 var Maybe = require('../instances/maybe')
   , Just = Maybe.Just
   , Nothing = Maybe.Nothing
@@ -81,8 +80,8 @@ describe('Maybe', function(){
     })
 
     it('binds a value to the function', function(){
-      var result = mbind(Just(3), function(three){
-        return mbind(Just(4), function(four){
+      var result = chain(Just(3), function(three){
+        return chain(Just(4), function(four){
           return Just(three + four);
         })
       });
