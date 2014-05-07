@@ -40,10 +40,6 @@ var fmap = curry(function(f, u) {
   return u.fmap ? u.fmap(f) : u.map(f);
 });
 
-var of = curry(function(f, a) {
-  return a.of(f);
-});
-
 var ap = curry(function(a1, a2) {
   return a1.ap(a2);
 });
@@ -72,14 +68,8 @@ var concat = curry(function(x, y) {
   return x.concat(y);
 });
 
-var empty = function(x) {
-  return x.empty();
-};
-
-var mconcat = function(xs) {
-	if(!xs[0]) return xs;
-  var e = empty(xs[0]);
-  return xs.reduce(concat, e);
+var mconcat = function(xs, empty) {
+  return xs.length ? xs.reduce(concat) : empty();
 };
 
 var sequenceA = curry(function(fctr) {
@@ -120,15 +110,12 @@ Pointy.K = K;
 Pointy.compose = compose;
 Pointy.fmap = fmap;
 Pointy.map = fmap;
-Pointy.of = of;
 Pointy.ap = ap;
 Pointy.liftA2 = liftA2;
 Pointy.liftA3 = liftA3;
 Pointy.chain = chain;
 Pointy.flatMap = flatMap;
 Pointy.mjoin = mjoin;
-Pointy.empty = empty;
-Pointy.mempty = empty;
 Pointy.concat = concat;
 Pointy.mappend = concat;
 Pointy.mconcat = mconcat;
@@ -138,7 +125,6 @@ Pointy.foldMap = foldMap;
 Pointy.fold = fold;
 Pointy.toList = toList;
 Pointy.expose = expose;
-
 
 module.exports = Pointy;
 

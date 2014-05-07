@@ -11,7 +11,7 @@ Id.prototype.concat = function(b) {
 var runIdentity = function(i) { return i.value; };
 
 Id.prototype.empty = function() {
-	return new Id(empty(this.value));
+	return new Id(this.value.empty());
 };
 
 Id.prototype.map = function(f) {
