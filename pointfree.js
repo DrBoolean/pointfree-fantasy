@@ -37,7 +37,7 @@ var id = function(x) { return x; }
 var K = function(x) { return function(){ return x; } }
 
 var fmap = curry(function(f, u) {
-  return (u.fmap && u.fmap(f)) || u.map(f);
+  return u.fmap ? u.fmap(f) : u.map(f);
 });
 
 var of = curry(function(f, a) {
@@ -119,6 +119,7 @@ Pointy.I = id;
 Pointy.K = K;
 Pointy.compose = compose;
 Pointy.fmap = fmap;
+Pointy.map = fmap;
 Pointy.of = of;
 Pointy.ap = ap;
 Pointy.liftA2 = liftA2;

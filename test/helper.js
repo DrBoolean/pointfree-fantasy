@@ -23,7 +23,7 @@ var monoidIdentityTest = function(gen) {
 
 var functorIdentity = function(gen) {
   return forAll(gen).satisfy(function(m) {
-    assert.deepEqual(fmap(I, m), I(m));
+    assert.deepEqual(map(I, m), I(m));
     return true;
   }).asTest({times: 100})
 };
@@ -32,7 +32,7 @@ var functorComp = function(gen) {
   return forAll(gen).satisfy(function(m) {
     var f = add('one')
       , g = add('two');
-    assert.deepEqual(fmap(compose(f, g), m), compose(fmap(f), fmap(g))(m));
+    assert.deepEqual(map(compose(f, g), m), compose(map(f), map(g))(m));
     return true;
   }).asTest({times: 100})
 };

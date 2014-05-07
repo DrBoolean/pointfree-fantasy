@@ -28,7 +28,7 @@ describe('Function', function(){
 
   describe("Functor", function() {
     it('composes the functions', function() {
-      assert.equal(fmap(g, f)(' bla '), ' bla helloworld')
+      assert.equal(map(g, f)(' bla '), ' bla helloworld')
     });
   });
 
