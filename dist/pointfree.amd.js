@@ -1,7 +1,5 @@
 define([], function() {
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-module.exports = require('./pointfree');
-},{"./pointfree":27}],2:[function(require,module,exports){
 var curry = require('lodash.curry');
 var _flatten = function(xs) {
   return xs.reduce(function(a,b){return a.concat(b);}, []);
@@ -13,37 +11,37 @@ var _fmap = function(f) {
 };
 
 Object.defineProperty(Array.prototype, 'fmap',{
-    value: _fmap,
-    writable: true,
-    configurable: true,
-    enumerable: false
+  value: _fmap,
+  writable: true,
+  configurable: true,
+  enumerable: false
 });
 
 var _empty = function() { return []; };
 
 Object.defineProperty(Array.prototype, 'empty',{
-    value: _empty,
-    writable: true,
-    configurable: true,
-    enumerable: false
+  value: _empty,
+  writable: true,
+  configurable: true,
+  enumerable: false
 });
 
 var _chain = function(f) { return _flatten(this.fmap(f)); };
 
 Object.defineProperty(Array.prototype, 'chain',{
-    value: _chain,
-    writable: true,
-    configurable: true,
-    enumerable: false
+  value: _chain,
+  writable: true,
+  configurable: true,
+  enumerable: false
 });
 
 var _of = function(x) { return [x]; };
 
 Object.defineProperty(Array.prototype, 'of',{
-    value: _of,
-    writable: true,
-    configurable: true,
-    enumerable: false
+  value: _of,
+  writable: true,
+  configurable: true,
+  enumerable: false
 });
 
 var _ap = function(a2) {
@@ -54,10 +52,10 @@ var _ap = function(a2) {
 };
 
 Object.defineProperty(Array.prototype, 'ap',{
-    value: _ap,
-    writable: true,
-    configurable: true,
-    enumerable: false
+  value: _ap,
+  writable: true,
+  configurable: true,
+  enumerable: false
 });
 
 var _traverse = function(f) {
@@ -71,10 +69,10 @@ var _traverse = function(f) {
 };
 
 Object.defineProperty(Array.prototype, 'traverse',{
-    value: _traverse,
-    writable: true,
-    configurable: true,
-    enumerable: false
+  value: _traverse,
+  writable: true,
+  configurable: true,
+  enumerable: false
 });
 
 var _foldl = function(f, acc) {
@@ -82,14 +80,13 @@ var _foldl = function(f, acc) {
 }
 
 Object.defineProperty(Array.prototype, 'foldl',{
-    value: _foldl,
-    writable: true,
-    configurable: true,
-    enumerable: false
+  value: _foldl,
+  writable: true,
+  configurable: true,
+  enumerable: false
 });
 
-
-},{"lodash.curry":5}],3:[function(require,module,exports){
+},{"lodash.curry":4}],2:[function(require,module,exports){
 var _K = function(x) { return function(y) { return x; } };
 
 var _fmap = function(g) {
@@ -166,7 +163,7 @@ Object.defineProperty(Function.prototype, 'ap',{
     enumerable: false
 });
 
-},{}],4:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 var _empty = function() { return ""; };
 
 Object.defineProperty(String.prototype, 'empty',{
@@ -176,7 +173,7 @@ Object.defineProperty(String.prototype, 'empty',{
     enumerable: false
 });
 
-},{}],5:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 /**
  * Lo-Dash 2.4.1 (Custom Build) <http://lodash.com/>
  * Build: `lodash modularize modern exports="npm" -o ./npm/`
@@ -222,7 +219,7 @@ function curry(func, arity) {
 
 module.exports = curry;
 
-},{"lodash._createwrapper":6}],6:[function(require,module,exports){
+},{"lodash._createwrapper":5}],5:[function(require,module,exports){
 /**
  * Lo-Dash 2.4.1 (Custom Build) <http://lodash.com/>
  * Build: `lodash modularize modern exports="npm" -o ./npm/`
@@ -330,7 +327,7 @@ function createWrapper(func, bitmask, partialArgs, partialRightArgs, thisArg, ar
 
 module.exports = createWrapper;
 
-},{"lodash._basebind":7,"lodash._basecreatewrapper":16,"lodash._slice":25,"lodash.isfunction":26}],7:[function(require,module,exports){
+},{"lodash._basebind":6,"lodash._basecreatewrapper":15,"lodash._slice":24,"lodash.isfunction":25}],6:[function(require,module,exports){
 /**
  * Lo-Dash 2.4.1 (Custom Build) <http://lodash.com/>
  * Build: `lodash modularize modern exports="npm" -o ./npm/`
@@ -394,7 +391,7 @@ function baseBind(bindData) {
 
 module.exports = baseBind;
 
-},{"lodash._basecreate":8,"lodash._setbinddata":11,"lodash._slice":25,"lodash.isobject":14}],8:[function(require,module,exports){
+},{"lodash._basecreate":7,"lodash._setbinddata":10,"lodash._slice":24,"lodash.isobject":13}],7:[function(require,module,exports){
 var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};/**
  * Lo-Dash 2.4.1 (Custom Build) <http://lodash.com/>
  * Build: `lodash modularize modern exports="npm" -o ./npm/`
@@ -438,7 +435,7 @@ if (!nativeCreate) {
 
 module.exports = baseCreate;
 
-},{"lodash._isnative":9,"lodash.isobject":14,"lodash.noop":10}],9:[function(require,module,exports){
+},{"lodash._isnative":8,"lodash.isobject":13,"lodash.noop":9}],8:[function(require,module,exports){
 /**
  * Lo-Dash 2.4.1 (Custom Build) <http://lodash.com/>
  * Build: `lodash modularize modern exports="npm" -o ./npm/`
@@ -474,7 +471,7 @@ function isNative(value) {
 
 module.exports = isNative;
 
-},{}],10:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 /**
  * Lo-Dash 2.4.1 (Custom Build) <http://lodash.com/>
  * Build: `lodash modularize modern exports="npm" -o ./npm/`
@@ -502,7 +499,7 @@ function noop() {
 
 module.exports = noop;
 
-},{}],11:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 /**
  * Lo-Dash 2.4.1 (Custom Build) <http://lodash.com/>
  * Build: `lodash modularize modern exports="npm" -o ./npm/`
@@ -547,11 +544,11 @@ var setBindData = !defineProperty ? noop : function(func, value) {
 
 module.exports = setBindData;
 
-},{"lodash._isnative":12,"lodash.noop":13}],12:[function(require,module,exports){
+},{"lodash._isnative":11,"lodash.noop":12}],11:[function(require,module,exports){
+module.exports=require(8)
+},{}],12:[function(require,module,exports){
 module.exports=require(9)
 },{}],13:[function(require,module,exports){
-module.exports=require(10)
-},{}],14:[function(require,module,exports){
 /**
  * Lo-Dash 2.4.1 (Custom Build) <http://lodash.com/>
  * Build: `lodash modularize modern exports="npm" -o ./npm/`
@@ -592,7 +589,7 @@ function isObject(value) {
 
 module.exports = isObject;
 
-},{"lodash._objecttypes":15}],15:[function(require,module,exports){
+},{"lodash._objecttypes":14}],14:[function(require,module,exports){
 /**
  * Lo-Dash 2.4.1 (Custom Build) <http://lodash.com/>
  * Build: `lodash modularize modern exports="npm" -o ./npm/`
@@ -614,7 +611,7 @@ var objectTypes = {
 
 module.exports = objectTypes;
 
-},{}],16:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 /**
  * Lo-Dash 2.4.1 (Custom Build) <http://lodash.com/>
  * Build: `lodash modularize modern exports="npm" -o ./npm/`
@@ -694,23 +691,23 @@ function baseCreateWrapper(bindData) {
 
 module.exports = baseCreateWrapper;
 
-},{"lodash._basecreate":17,"lodash._setbinddata":20,"lodash._slice":25,"lodash.isobject":23}],17:[function(require,module,exports){
-arguments[4][8][0].apply(exports,arguments)
-},{"lodash._isnative":18,"lodash.isobject":23,"lodash.noop":19}],18:[function(require,module,exports){
+},{"lodash._basecreate":16,"lodash._setbinddata":19,"lodash._slice":24,"lodash.isobject":22}],16:[function(require,module,exports){
+arguments[4][7][0].apply(exports,arguments)
+},{"lodash._isnative":17,"lodash.isobject":22,"lodash.noop":18}],17:[function(require,module,exports){
+module.exports=require(8)
+},{}],18:[function(require,module,exports){
 module.exports=require(9)
 },{}],19:[function(require,module,exports){
 module.exports=require(10)
-},{}],20:[function(require,module,exports){
-module.exports=require(11)
-},{"lodash._isnative":21,"lodash.noop":22}],21:[function(require,module,exports){
+},{"lodash._isnative":20,"lodash.noop":21}],20:[function(require,module,exports){
+module.exports=require(8)
+},{}],21:[function(require,module,exports){
 module.exports=require(9)
 },{}],22:[function(require,module,exports){
-module.exports=require(10)
-},{}],23:[function(require,module,exports){
+module.exports=require(13)
+},{"lodash._objecttypes":23}],23:[function(require,module,exports){
 module.exports=require(14)
-},{"lodash._objecttypes":24}],24:[function(require,module,exports){
-module.exports=require(15)
-},{}],25:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 /**
  * Lo-Dash 2.4.1 (Custom Build) <http://lodash.com/>
  * Build: `lodash modularize modern exports="npm" -o ./npm/`
@@ -750,7 +747,7 @@ function slice(array, start, end) {
 
 module.exports = slice;
 
-},{}],26:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 /**
  * Lo-Dash 2.4.1 (Custom Build) <http://lodash.com/>
  * Build: `lodash modularize modern exports="npm" -o ./npm/`
@@ -779,7 +776,7 @@ function isFunction(value) {
 
 module.exports = isFunction;
 
-},{}],27:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 var curry = require('lodash.curry');
 
 var BUILT_INS = { 'array': require('./instances/array')
@@ -801,29 +798,25 @@ var toAssociativeCommaInfix = function(fn) {
   return function() {
     var fns = [].slice.call(arguments)
     return function() {
-      return _groupsOf(2, fns).reverse().map(function(g) {      
+      return _groupsOf(2, fns).reverse().map(function(g) {
         return (g.length > 1) ? fn.apply(this,g) : g[0];
       }).reduce(function(x, f) {
         return [f.apply(f,x)];
       }, arguments)[0];
-    };    
+    };
   };
 };
 
 var compose = toAssociativeCommaInfix(_compose);
 
 
-var Pointy = {};
+var pointy = {};
 
 var id = function(x) { return x; }
 var K = function(x) { return function(){ return x; } }
 
 var fmap = curry(function(f, u) {
-  return (u.fmap && u.fmap(f)) || u.map(f);
-});
-
-var of = curry(function(f, a) {
-  return a.of(f);
+  return u.fmap ? u.fmap(f) : u.map(f);
 });
 
 var ap = curry(function(a1, a2) {
@@ -854,14 +847,8 @@ var concat = curry(function(x, y) {
   return x.concat(y);
 });
 
-var empty = function(x) {
-  return x.empty();
-};
-
-var mconcat = function(xs) {
-  if(!xs[0]) return xs;
-  var e = empty(xs[0]);
-  return xs.reduce(concat, e);
+var mconcat = function(xs, empty) {
+  return xs.length ? xs.reduce(concat) : empty();
 };
 
 var sequenceA = curry(function(fctr) {
@@ -890,43 +877,40 @@ var toList = function(x) {
 
 var expose = function(env) {
   var f;
-  for (f in Pointy) {
-    if (f !== 'expose' && Pointy.hasOwnProperty(f)) {
-      env[f] = Pointy[f];
+  for (f in pointy) {
+    if (f !== 'expose' && pointy.hasOwnProperty(f)) {
+      env[f] = pointy[f];
     }
   }
 }
 
-Pointy.I = id;
-Pointy.K = K;
-Pointy.compose = compose;
-Pointy.fmap = fmap;
-Pointy.of = of;
-Pointy.ap = ap;
-Pointy.liftA2 = liftA2;
-Pointy.liftA3 = liftA3;
-Pointy.chain = chain;
-Pointy.flatMap = flatMap;
-Pointy.mjoin = mjoin;
-Pointy.empty = empty;
-Pointy.mempty = empty;
-Pointy.concat = concat;
-Pointy.mappend = concat;
-Pointy.mconcat = mconcat;
-Pointy.sequenceA = sequenceA;
-Pointy.traverse = traverse;
-Pointy.foldMap = foldMap;
-Pointy.fold = fold;
-Pointy.toList = toList;
-Pointy.expose = expose;
+pointy.I = id;
+pointy.K = K;
+pointy.compose = compose;
+pointy.fmap = fmap;
+pointy.map = fmap;
+pointy.ap = ap;
+pointy.liftA2 = liftA2;
+pointy.liftA3 = liftA3;
+pointy.chain = chain;
+pointy.flatMap = flatMap;
+pointy.mjoin = mjoin;
+pointy.concat = concat;
+pointy.mappend = concat;
+pointy.mconcat = mconcat;
+pointy.sequenceA = sequenceA;
+pointy.traverse = traverse;
+pointy.foldMap = foldMap;
+pointy.fold = fold;
+pointy.toList = toList;
+pointy.expose = expose;
 
-
-module.exports = Pointy;
+module.exports = pointy;
 
 if(typeof window == "object") {
-  PointFree = Pointy;
+  pointfree = pointy;
 }
 
-},{"./instances/array":2,"./instances/function":3,"./instances/string":4,"lodash.curry":5}]},{},[1])
+},{"./instances/array":1,"./instances/function":2,"./instances/string":3,"lodash.curry":4}]},{},[26])
 return PointFree;
 });
