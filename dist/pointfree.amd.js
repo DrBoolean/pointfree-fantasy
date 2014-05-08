@@ -912,5 +912,5 @@ if(typeof window == "object") {
 }
 
 },{"./instances/array":1,"./instances/function":2,"./instances/string":3,"lodash.curry":4}]},{},[26])
-return PointFree;
+return pointfree;
 });
