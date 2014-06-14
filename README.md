@@ -13,7 +13,7 @@ var Maybe = require('./pointfree-fantasy/instances/maybe');
 var toUpperCase = function(x) { return x.toUpperCase(); };
 
 map(toUpperCase, Maybe('mystring')) // Just("MYSTRING")
-fmap(toUpperCase, Maybe(null)) // Nothing
+map(toUpperCase, Maybe(null)) // Nothing
 
 ```
 

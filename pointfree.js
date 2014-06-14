@@ -36,8 +36,8 @@ var pointy = {};
 var id = function(x) { return x; }
 var K = function(x) { return function(){ return x; } }
 
-var fmap = curry(function(f, u) {
-  return u.fmap ? u.fmap(f) : u.map(f);
+var map = curry(function(f, u) {
+  return u.map ? u.map(f) : u.map(f);
 });
 
 var ap = curry(function(a1, a2) {
@@ -45,11 +45,11 @@ var ap = curry(function(a1, a2) {
 });
 
 var liftA2 = curry(function(f, x, y) {
-  return fmap(f,x).ap(y);
+  return map(f,x).ap(y);
 });
 
 var liftA3 = curry(function(f, x, y, z) {
-  return fmap(f, x).ap(y).ap(z);
+  return map(f, x).ap(y).ap(z);
 });
 
 var chain = curry(function(mv, f) {
@@ -77,7 +77,7 @@ var sequenceA = curry(function(fctr) {
 });
 
 var traverse = curry(function(f, fctr) {
-  return compose(sequenceA, fmap(f))(fctr);
+  return compose(sequenceA, map(f))(fctr);
 });
 
 var foldMap = curry(function(f, fldable) {
@@ -105,11 +105,11 @@ var expose = function(env) {
   }
 }
 
+pointy.curry = curry;
 pointy.I = id;
 pointy.K = K;
 pointy.compose = compose;
-pointy.fmap = fmap;
-pointy.map = fmap;
+pointy.map = map;
 pointy.ap = ap;
 pointy.liftA2 = liftA2;
 pointy.liftA3 = liftA3;
