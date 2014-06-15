@@ -1,12 +1,12 @@
 var _K = function(x) { return function(y) { return x; } };
 
-var _fmap = function(g) {
+var _map = function(g) {
   var f = this;
   return function(x) { return g(f(x)) };
 };
 
-Object.defineProperty(Function.prototype, 'fmap',{
-    value: _fmap,
+Object.defineProperty(Function.prototype, 'map',{
+    value: _map,
     writable: true,
     configurable: true,
     enumerable: false
