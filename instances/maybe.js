@@ -1,7 +1,7 @@
 var util = require('../util')
   , makeType = util.makeType
   , subClass = util.subClass
-  , fmap = require('../pointfree').fmap
+  , map = require('../pointfree').map
   ;
 
 var MaybeType = makeType()
@@ -45,7 +45,7 @@ Nothing.prototype.ap = function(m) {
   return Nothing();
 }
 Just.prototype.ap = function(m) {
-  return fmap(this.val, m);
+  return map(this.val, m);
 }
 
 Nothing.prototype.chain = function(f) {

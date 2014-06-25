@@ -76,7 +76,7 @@ var monadAssoc = function(gen) {
       var f = function(x){ return m.of(add('nest1', x))}
         , g = function(x){ return m.of(add('nest2', x))}
         , h = function(x){ return m.of(add('nest3', x))}
-        , mcompose_ = curry(function(f, g, x) { return chain(g(x), f); })
+        , mcompose_ = curry(function(f, g, x) { return chain(f, g(x)); })
         ;
       assert.deepEqual(mcompose_(f, mcompose_(g, h))(m), mcompose_(mcompose_(f, g), h)(m));
       return true;

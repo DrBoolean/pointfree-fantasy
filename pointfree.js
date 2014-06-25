@@ -36,8 +36,8 @@ var pointy = {};
 var id = function(x) { return x; }
 var K = function(x) { return function(){ return x; } }
 
-var fmap = curry(function(f, u) {
-  return u.fmap ? u.fmap(f) : u.map(f);
+var map = curry(function(f, u) {
+  return u.fmap ? u.fmap(f) : u.map(f); //sometimes map passes index so we use fmap if it has it.
 });
 
 var ap = curry(function(a1, a2) {
@@ -45,23 +45,19 @@ var ap = curry(function(a1, a2) {
 });
 
 var liftA2 = curry(function(f, x, y) {
-  return fmap(f,x).ap(y);
+  return map(f,x).ap(y);
 });
 
 var liftA3 = curry(function(f, x, y, z) {
-  return fmap(f, x).ap(y).ap(z);
+  return map(f, x).ap(y).ap(z);
 });
 
-var chain = curry(function(mv, f) {
-  return mv.chain(f);
-});
-
-var flatMap = curry(function(f, mv) {
+var chain = curry(function(f, mv) {
   return mv.chain(f);
 });
 
 var mjoin = function(mmv) {
-  return chain(mmv, id);
+  return chain(id, mmv);
 };
 
 var concat = curry(function(x, y) {
@@ -92,7 +88,7 @@ var foldMap = curry(function(f, fldable) {
   }, null);
 });
 
-var fold = foldMap(I)
+var fold = foldMap(I);
 
 var toList = function(x) {
   return x.reduce(function(acc, y) {
@@ -112,15 +108,13 @@ var expose = function(env) {
 pointy.I = id;
 pointy.K = K;
 pointy.compose = compose;
-pointy.curry = curry;
-pointy.fmap = fmap; //depricate me
+pointy.curry = curry; //lodash curry
 pointy.of = of;
-pointy.map = fmap;
+pointy.map = map;
 pointy.ap = ap;
 pointy.liftA2 = liftA2;
 pointy.liftA3 = liftA3;
 pointy.chain = chain;
-pointy.flatMap = flatMap;
 pointy.mjoin = mjoin;
 pointy.concat = concat;
 pointy.mappend = concat;

@@ -80,11 +80,11 @@ describe('Maybe', function(){
     })
 
     it('binds a value to the function', function(){
-      var result = chain(Just(3), function(three){
-        return chain(Just(4), function(four){
+      var result = chain(function(three){
+        return chain(function(four){
           return Just(three + four);
-        })
-      });
+        }, Just(4))
+      }, Just(3));
       assert.deepEqual(result, Just(7));
     })
   });
