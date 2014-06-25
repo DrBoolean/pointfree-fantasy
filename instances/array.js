@@ -1,4 +1,5 @@
 var curry = require('lodash.curry');
+
 var _flatten = function(xs) {
   return xs.reduce(function(a,b){return a.concat(b);}, []);
 };
@@ -56,14 +57,11 @@ Object.defineProperty(Array.prototype, 'ap',{
   enumerable: false
 });
 
-var _traverse = function(f) {
-  var xs = this;
+var _traverse = function(f, point) {
   var cons_f = function(ys, x){
-    var z = f(x).map(curry(function(x,y){ return y.concat(x); }));
-    ys = ys || z.of([]);
-    return z.ap(ys);
+    return f(x).map(function(x){ return function(y){ return y.concat(x); } }).ap(ys);
   }
-  return xs.reduce(cons_f, null);
+  return this.reduce(cons_f, point([]));
 };
 
 Object.defineProperty(Array.prototype, 'traverse',{
@@ -73,13 +71,3 @@ Object.defineProperty(Array.prototype, 'traverse',{
   enumerable: false
 });
 
-var _foldl = function(f, acc) {
-  return this.reduce(f, acc);
-}
-
-Object.defineProperty(Array.prototype, 'foldl',{
-  value: _foldl,
-  writable: true,
-  configurable: true,
-  enumerable: false
-});

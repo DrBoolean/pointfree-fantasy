@@ -22,7 +22,7 @@ describe('Array', function(){
   it('is traversable', function() {
     var f = function(x){ return Maybe(x); }
     var xs = [1,2];
-    assert.deepEqual(traverse(f, xs), Maybe([1,2])) 
+    assert.deepEqual(traverse(f, Maybe.of, xs), Maybe([1,2]));
   })
 
   it('is foldable', function() {

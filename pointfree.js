@@ -72,26 +72,30 @@ var mconcat = function(xs, empty) {
   return xs.length ? xs.reduce(concat) : empty();
 };
 
-var sequenceA = curry(function(fctr) {
-  return fctr.traverse(id);
+var sequenceA = curry(function(point, fctr) {
+  return fctr.traverse(id, point);
 });
 
-var traverse = curry(function(f, fctr) {
-  return compose(sequenceA, fmap(f))(fctr);
+var of = function(x) {
+  return x.of;
+};
+
+var traverse = curry(function(f, point, fctr) {
+  return compose(sequenceA(point), map(f))(fctr);
 });
 
 var foldMap = curry(function(f, fldable) {
-  return fldable.foldl(function(acc, x) {
-    var r = f(x)
+  return fldable.reduce(function(acc, x) {
+    var r = f(x);
     acc = acc || r.empty();
     return acc.concat(r);
-  })
+  }, null);
 });
 
 var fold = foldMap(I)
 
 var toList = function(x) {
-  return x.foldl(function(acc, y) {
+  return x.reduce(function(acc, y) {
     return [y].concat(acc);
   }, []);
 };
@@ -108,7 +112,9 @@ var expose = function(env) {
 pointy.I = id;
 pointy.K = K;
 pointy.compose = compose;
-pointy.fmap = fmap;
+pointy.curry = curry;
+pointy.fmap = fmap; //depricate me
+pointy.of = of;
 pointy.map = fmap;
 pointy.ap = ap;
 pointy.liftA2 = liftA2;

@@ -37,7 +37,7 @@ Nothing.prototype.map = function(f) {
 Just.prototype.map = function(f) {
   return Just(f(this.val));
 }
-
+Maybe.of = Maybe;
 Nothing.prototype.of = function(x) { return Nothing(x) };
 Just.prototype.of = function(x) { return Just(x) };
 
@@ -54,17 +54,17 @@ Nothing.prototype.chain = function(f) {
 Just.prototype.chain = function(f) {
   return f(this.val);
 }
-Nothing.prototype.traverse = function(f) {
-  return [Nothing()]; //how to get pure if we can't call f? [] for now
+Nothing.prototype.traverse = function(f, point) {
+  return point(Nothing());
 }
-Just.prototype.traverse = function(f) {
+Just.prototype.traverse = function(f, point) {
   return f(this.val).map(Just);
 };
-Nothing.prototype.foldl = function(f) {
-  return [] // same prob as traverse - need to run f() to get correct empty
+Nothing.prototype.reduce = function(f) {
+  return f(null);
 };
-Just.prototype.foldl = function(f, acc) {
-  return f(acc, this.val); 
+Just.prototype.reduce = function(f, acc) {
+  return f(acc, this.val);
 };
 
 module.exports = Maybe;

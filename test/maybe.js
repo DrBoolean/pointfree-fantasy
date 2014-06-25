@@ -91,7 +91,7 @@ describe('Maybe', function(){
   describe('Other', function() {
     it('is traversable', function() {
       var f = function(x){ return [x]; }
-      assert.deepEqual(traverse(f, Just(1)), [Just(1)]) 
+      assert.deepEqual(traverse(f, Array.of, Just(1)), [Just(1)]);
     })
 
     it('is foldable', function() {
