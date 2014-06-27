@@ -1,5 +1,6 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 var curry = require('lodash.curry');
+
 var _flatten = function(xs) {
   return xs.reduce(function(a,b){return a.concat(b);}, []);
 };
@@ -57,14 +58,11 @@ Object.defineProperty(Array.prototype, 'ap',{
   enumerable: false
 });
 
-var _traverse = function(f) {
-  var xs = this;
+var _traverse = function(f, point) {
   var cons_f = function(ys, x){
-    var z = f(x).map(curry(function(x,y){ return y.concat(x); }));
-    ys = ys || z.of([]);
-    return z.ap(ys);
+    return f(x).map(function(x){ return function(y){ return y.concat(x); } }).ap(ys);
   }
-  return xs.reduce(cons_f, null);
+  return this.reduce(cons_f, point([]));
 };
 
 Object.defineProperty(Array.prototype, 'traverse',{
@@ -74,27 +72,17 @@ Object.defineProperty(Array.prototype, 'traverse',{
   enumerable: false
 });
 
-var _foldl = function(f, acc) {
-  return this.reduce(f, acc);
-}
-
-Object.defineProperty(Array.prototype, 'foldl',{
-  value: _foldl,
-  writable: true,
-  configurable: true,
-  enumerable: false
-});
 
 },{"lodash.curry":4}],2:[function(require,module,exports){
 var _K = function(x) { return function(y) { return x; } };
 
-var _fmap = function(g) {
+var _map = function(g) {
   var f = this;
   return function(x) { return g(f(x)) };
 };
 
-Object.defineProperty(Function.prototype, 'fmap',{
-    value: _fmap,
+Object.defineProperty(Function.prototype, 'map',{
+    value: _map,
     writable: true,
     configurable: true,
     enumerable: false
@@ -814,8 +802,8 @@ var pointy = {};
 var id = function(x) { return x; }
 var K = function(x) { return function(){ return x; } }
 
-var fmap = curry(function(f, u) {
-  return u.fmap ? u.fmap(f) : u.map(f);
+var map = curry(function(f, u) {
+  return u.fmap ? u.fmap(f) : u.map(f); //sometimes map passes index so we use fmap if it has it.
 });
 
 var ap = curry(function(a1, a2) {
@@ -823,23 +811,19 @@ var ap = curry(function(a1, a2) {
 });
 
 var liftA2 = curry(function(f, x, y) {
-  return fmap(f,x).ap(y);
+  return map(f,x).ap(y);
 });
 
 var liftA3 = curry(function(f, x, y, z) {
-  return fmap(f, x).ap(y).ap(z);
+  return map(f, x).ap(y).ap(z);
 });
 
-var chain = curry(function(mv, f) {
-  return mv.chain(f);
-});
-
-var flatMap = curry(function(f, mv) {
+var chain = curry(function(f, mv) {
   return mv.chain(f);
 });
 
 var mjoin = function(mmv) {
-  return chain(mmv, id);
+  return chain(id, mmv);
 };
 
 var concat = curry(function(x, y) {
@@ -850,26 +834,30 @@ var mconcat = function(xs, empty) {
   return xs.length ? xs.reduce(concat) : empty();
 };
 
-var sequenceA = curry(function(fctr) {
-  return fctr.traverse(id);
+var sequenceA = curry(function(point, fctr) {
+  return fctr.traverse(id, point);
 });
 
-var traverse = curry(function(f, fctr) {
-  return compose(sequenceA, fmap(f))(fctr);
+var of = function(x) {
+  return x.of;
+};
+
+var traverse = curry(function(f, point, fctr) {
+  return compose(sequenceA(point), map(f))(fctr);
 });
 
 var foldMap = curry(function(f, fldable) {
-  return fldable.foldl(function(acc, x) {
-    var r = f(x)
+  return fldable.reduce(function(acc, x) {
+    var r = f(x);
     acc = acc || r.empty();
     return acc.concat(r);
-  })
+  }, null);
 });
 
-var fold = foldMap(I)
+var fold = foldMap(I);
 
 var toList = function(x) {
-  return x.foldl(function(acc, y) {
+  return x.reduce(function(acc, y) {
     return [y].concat(acc);
   }, []);
 };
@@ -886,13 +874,13 @@ var expose = function(env) {
 pointy.I = id;
 pointy.K = K;
 pointy.compose = compose;
-pointy.fmap = fmap;
-pointy.map = fmap;
+pointy.curry = curry; //lodash curry
+pointy.of = of;
+pointy.map = map;
 pointy.ap = ap;
 pointy.liftA2 = liftA2;
 pointy.liftA3 = liftA3;
 pointy.chain = chain;
-pointy.flatMap = flatMap;
 pointy.mjoin = mjoin;
 pointy.concat = concat;
 pointy.mappend = concat;
