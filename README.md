@@ -44,7 +44,7 @@ THE LIST
 
 Tutorial
 ----------
-fantasyland-pointfree implements a point-free version of the fantasy-land spec, in order to promote a less cluttered, more Haskell-like approach to algebraic programming. We'll justify this approach using Functor as an example.
+pointfree-fantasy implements a point-free version of the fantasy-land spec, in order to promote a less cluttered, more Haskell-like approach to algebraic programming. We'll justify this approach using Functor as an example.
 
 In Haskell the Functor typeclass is defined (#!http://www.haskell.org/haskellwiki/Functor) as:
 
