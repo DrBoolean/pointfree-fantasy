@@ -241,7 +241,6 @@ fantasyland-pointfree incorporates functions that work the way we like
 from several external libraries, and Future is one.)
 
 We revise getRows to return a Future of an Array of Rows:
-(TODO: what is up with this syntax)
 
 ```
 //+ getRows :: Int -> Future([Row])
@@ -287,7 +286,7 @@ Map simply delegates to the member function .map on whatever object it receives 
 Future has a method `fork` that runs its actions and resolves to its underlying value, so we can invoke our prog like this:
 
 ```
-prog(2).fork(err, succ)  //TODO explain the syntax; what are err and succ?
+prog(2).fork(function(err){}, function(result){}) // see folktale
 ```
 
 and the page displaying two rows will be drawn when the Future's underlying value is realized.
