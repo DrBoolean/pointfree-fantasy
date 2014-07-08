@@ -222,15 +222,19 @@ Now shit's about to get realer because we need to fetch the rows asynchronously 
 
 *Continuations return null and kind of "disappear" into your app which makes it hard to see the control flow. It also leads to this "pyramid of doom" style or "callback hell" that so many people despise.
 
-// Often the callback gets passed to god knows where and is called god knows where.
+
+Often the callback gets passed to god knows where and is called god knows where.
+```
 getRows :: (Int -> [Row]) -> void
 prog :: Int -> void
 prog = getRows(compose(map(drawOnScreen), map(map(renderRow))) //void
+```
 
-// Since getRows returns void we can't compose it in a linear fashion or keep "extending the computation" like we do below
+Since getRows returns void we can't compose it in a linear fashion or keep "extending the computation" like we do below
+```
 prog :: Int -> Dom
 prog = compose(map(drawOnScreen), map(map(renderRow)), getRows)
-
+```
 
 (Future is defined in folktale's data.future repository (#!https://github.com/folktale/data.future).
 fantasyland-pointfree incorporates functions that work the way we like
