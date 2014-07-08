@@ -297,7 +297,7 @@ and the page displaying two rows will be drawn when the Future's underlying valu
 Now let's see how the laws help us do a bit of refactoring.
 
 
-1. we remember compose is associative so we can simplify our prog with a helper
+- we remember compose is associative so we can simplify our prog with a helper
 (This comes not from the Functor laws but from the fact that functions form a category; see below):
 
 
@@ -308,7 +308,7 @@ makePage = compose(map(drawOnScreen), map(map(renderRow)));`
 prog = compose(makePage, getRows);
 ```
 
-2. we remember our law: `compose(map(f), map(g)) == map(compose(f, g))`, so we factor out a map just like we do in oh, I don't know, ALGEBRA?:
+- we remember our law: `compose(map(f), map(g)) == map(compose(f, g))`, so we factor out a map just like we do in oh, I don't know, ALGEBRA?:
 
 
 ```
@@ -318,7 +318,7 @@ makePage = map(compose(drawOnScreen, map(renderRow)));
 prog = compose(makePage, getRows);
 ```
 
-3. finally we notice we'd rather have makePage work on simpler types than Futures:
+- finally we notice we'd rather have makePage work on simpler types than Futures:
 
 
 ```
