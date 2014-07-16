@@ -2,7 +2,7 @@ pointfree-fantasy
 =================
 
 Point-free wrappers for [fantasy-land](https://github.com/fantasyland/fantasy-land). Functions are curried using
-lodash's curry function](http://lodash.com/docs#curry), and receive their
+[lodash's curry function](http://lodash.com/docs#curry), and receive their
 data last. Gives us aliases with our familar haskell names as well.
 
 ```js
