@@ -1,7 +1,7 @@
 pointfree-fantasy
 =================
 
-Point free wrappers for fantasy land. Functions are curried using
+Point free wrappers for [fantasy-land](https://github.com/fantasyland/fantasy-land). Functions are curried using
 lodash's curry function](http://lodash.com/docs#curry), and receive their
 data last. Gives us aliases with our familar haskell names as well.
 
@@ -46,7 +46,7 @@ Tutorial
 ----------
 pointfree-fantasy implements a point-free version of the fantasy-land spec, in order to promote a less cluttered, more Haskell-like approach to algebraic programming. We'll justify this approach using Functor as an example.
 
-In Haskell the Functor typeclass is defined (#!http://www.haskell.org/haskellwiki/Functor) as:
+In Haskell the Functor typeclass is defined (http://www.haskell.org/haskellwiki/Functor) as:
 
 ```
 class Functor f where
@@ -86,7 +86,7 @@ Or as Julian Birch says:
 
 We haven't mentioned any specific Functors yet. It's the particular things that each different Functor can do that distinguish them from one another. Usually these particular things have to do with how you access the values in the container. The Functor laws, and the clean ways they help us to manipulate Functors, are what all Functors have in common.
 
-Take a look at Birch's little list of [things you can map over](http://www.colourcoding.net/blog/archive/2014/06/27/not-a-haskell-monad-tutorial-functors.aspx)
+Take a look at Birch's little list of [things you can map over](http://www.colourcoding.net/blog/archive/2014/06/27/not-a-haskell-monad-tutorial-functors.aspx).
 
 
 -------------------------------
@@ -101,7 +101,7 @@ The fmap function for Array, conveniently, is the similarly-named Array.prototyp
 Does it satisfy the Functor laws?
 
 
-Let's see how fantasy-land expresses the Functor laws (#!https://github.com/fantasyland/fantasy-land#functor):
+Let's see how fantasy-land expresses the Functor laws (https://github.com/fantasyland/fantasy-land#functor):
 
 ```
 u.map(function(a) { return a; }) is equivalent to u (identity)
