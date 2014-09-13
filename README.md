@@ -12,7 +12,7 @@ var Maybe = require('./pointfree-fantasy/instances/maybe');
 // setup an easy test fn
 var toUpperCase = function(x) { return x.toUpperCase(); };
 
-map(toUpperCase, Maybe('mystring')) // Just("MYSTRING")
+map(toUpperCase, Maybe('mystring')) // Just('MYSTRING')
 map(toUpperCase, Maybe(null)) // Nothing
 
 ```
@@ -75,7 +75,7 @@ fmap distributes over function composition.
 We can think of a Functor as a container that implements a map function. So if we had a Functor named Container, we'd expect to be able to say
 
 ```js
-Container("hello").map(concat(" world")).map(length);
+Container('hello').map(concat(' world')).map(length);
 ```
 
 and wind up with `Container(10)`. As long as each function works on the *content* of the Container, mapping the function over the Container will return a Container with the transformed content.
@@ -132,7 +132,7 @@ If you have a function that works on a single value and you want to transform it
 
 ```js
 funnyFortune = function(x){
-  return x + " in bed";
+  return x + ' in bed';
 };
 ```
 
@@ -182,7 +182,7 @@ renderRow, which takes a Row and returns a snippet of Html:
 ```js
 //+ renderRow :: Row -> Html
 renderRow = function(row) {
-  return "<div>"+row.title+"</div>"
+  return '<div>'+row.title+'</div>'
 };
 ```
 
@@ -250,7 +250,7 @@ We revise getRows to return a Future of an Array of Rows:
 //+ getRows :: Int -> Future([Row])
 getRows = function(i){
   return new Future(function(reject, resolve) {
-    resolve(i + " rows from the database");
+    resolve(i + ' rows from the database');
   });
 };
 ```
