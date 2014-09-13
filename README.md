@@ -306,7 +306,7 @@ Now let's see how the laws help us do a bit of refactoring.
 
 ```js
 //+ makePage :: Future([Row]) -> Future(Dom)
-makePage = compose(map(drawOnScreen), map(map(renderRow)));`
+makePage = compose(map(drawOnScreen), map(map(renderRow)));
 
 prog = compose(makePage, getRows);
 ```
