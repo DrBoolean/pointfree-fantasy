@@ -6,8 +6,8 @@ Point-free wrappers for [fantasy-land](https://github.com/fantasyland/fantasy-la
 data last. Gives us aliases with our familar haskell names as well.
 
 ```js
-require('./pointfree-fantasy').expose(global); // or if browser pointfree.expose(window)
-var Maybe = require('./pointfree-fantasy/instances/maybe');
+require('pointfree-fantasy').expose(global); // or if browser pointfree.expose(window)
+var Maybe = require('pointfree-fantasy/instances/maybe');
 
 // setup an easy test fn
 var toUpperCase = function(x) { return x.toUpperCase(); };
