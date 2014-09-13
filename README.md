@@ -182,7 +182,7 @@ renderRow, which takes a Row and returns a snippet of Html:
 ```js
 //+ renderRow :: Row -> Html
 renderRow = function(row) {
-  return '<div>'+row.title+'</div>'
+  return '<div>' + row.title + '</div>'
 };
 ```
 
