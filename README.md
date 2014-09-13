@@ -74,7 +74,9 @@ fmap distributes over function composition.
 
 We can think of a Functor as a container that implements a map function. So if we had a Functor named Container, we'd expect to be able to say
 
-`Container("hello").map(concat(" world")).map(length);`
+```js
+Container("hello").map(concat(" world")).map(length);
+```
 
 and wind up with `Container(10)`. As long as each function works on the *content* of the Container, mapping the function over the Container will return a Container with the transformed content.
 
@@ -151,8 +153,10 @@ And this works for every Functor, not just Array! We'll be talking soon enough a
 
 With this and compose, the laws become
 
-`map(id) == id`
-`map(compose(f, g)) == compose(map(f), map(g))`
+```js
+map(id) == id
+map(compose(f, g)) == compose(map(f), map(g))
+```
 
 Composing functions without explicitly mentioning their arguments is what we call "point-free style." The "points" in question are the actual values. In topology, where the term originated, the values are always points!
 
