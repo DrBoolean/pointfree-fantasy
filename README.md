@@ -6,13 +6,13 @@ Point-free wrappers for [fantasy-land](https://github.com/fantasyland/fantasy-la
 data last. Gives us aliases with our familar haskell names as well.
 
 ```js
-require('./pointfree-fantasy').expose(global); // or if browser pointfree.expose(window)
-var Maybe = require('./pointfree-fantasy/instances/maybe');
+require('pointfree-fantasy').expose(global); // or if browser pointfree.expose(window)
+var Maybe = require('pointfree-fantasy/instances/maybe');
 
 // setup an easy test fn
 var toUpperCase = function(x) { return x.toUpperCase(); };
 
-map(toUpperCase, Maybe('mystring')) // Just("MYSTRING")
+map(toUpperCase, Maybe('mystring')) // Just('MYSTRING')
 map(toUpperCase, Maybe(null)) // Nothing
 
 ```
@@ -48,7 +48,7 @@ pointfree-fantasy implements a point-free version of the fantasy-land spec, in o
 
 In Haskell the Functor typeclass is defined (http://www.haskell.org/haskellwiki/Functor) as:
 
-```
+```haskell
 class Functor f where
    fmap :: (a -> b) -> f a -> f b
 ```
@@ -61,7 +61,7 @@ and returns a function from type f a to type f b.
 
 and the Functor laws are
 
-```
+```haskell
 fmap id = id
 fmap (p . q) = (fmap p) . (fmap q)
 ```
@@ -74,7 +74,9 @@ fmap distributes over function composition.
 
 We can think of a Functor as a container that implements a map function. So if we had a Functor named Container, we'd expect to be able to say
 
-`Container("hello").map(concat(" world")).map(length);`
+```js
+Container('hello').map(concat(' world')).map(length);
+```
 
 and wind up with `Container(10)`. As long as each function works on the *content* of the Container, mapping the function over the Container will return a Container with the transformed content.
 
@@ -103,23 +105,23 @@ Does it satisfy the Functor laws?
 
 Let's see how fantasy-land expresses the Functor laws (https://github.com/fantasyland/fantasy-land#functor):
 
-```
-u.map(function(a) { return a; }) is equivalent to u (identity)
-u.map(function(x) { return f(g(x)); }) is equivalent to u.map(g).map(f) (composition)
+```js
+u.map(function(a) { return a; }) // is equivalent to u (identity)
+u.map(function(x) { return f(g(x)); }) // is equivalent to u.map(g).map(f) (composition)
 ```
 
 You can verify these pretty easily.
 
 But notice that the laws have gotten a bit more prolix. Of course, once we define
 
-```
+```js
 var id = function(a) { return a; };
 var compose = function(f, g) { return function(x) { return f(g(x)); }};
 ```
 
 they become
 
-```
+```js
 u.map(id) == u
 u.map(compose(f, g)) == u.map(g).map(f)
 ```
@@ -128,9 +130,9 @@ We want to avoid mentioning that u, too! We want to speak of standalone function
 
 If you have a function that works on a single value and you want to transform it to work on some functor, say Array, you can call map on your function like this: `map(f)`
 
-```
+```js
 funnyFortune = function(x){
-  return x + " in bed";
+  return x + ' in bed';
 };
 ```
 
@@ -138,7 +140,7 @@ funnyFortune = function(x){
 
 This saves you from having to type
 
-```
+```js
 var worksOnArrayFortune = function(xs){
   return xs.map(funnyFortune);
 };
@@ -151,8 +153,10 @@ And this works for every Functor, not just Array! We'll be talking soon enough a
 
 With this and compose, the laws become
 
-`map(id) == id`
-`map(compose(f, g)) == compose(map(f), map(g))`
+```js
+map(id) == id
+map(compose(f, g)) == compose(map(f), map(g))
+```
 
 Composing functions without explicitly mentioning their arguments is what we call "point-free style." The "points" in question are the actual values. In topology, where the term originated, the values are always points!
 
@@ -168,23 +172,23 @@ Say we have three functions:
 
 getRows, which takes an Int and returns an Array of Rows:
 
-```
+```js
 //+ getRows :: Int -> [Row]
 getRows = function(i) { return db.getSomeRows(i); };
 ```
 
 renderRow, which takes a Row and returns a snippet of Html:
 
-```
+```js
 //+ renderRow :: Row -> Html
 renderRow = function(row) {
-  return "<div>"+row.title+"</div>"
+  return '<div>' + row.title + '</div>'
 };
 ```
 
 and drawOnScreen, which takes an Array of Html snippets and returns a Dom tree:
 
-```
+```js
 //+ drawOnScreen :: [Html] -> Dom
 // you supply the code
 ```
@@ -192,7 +196,7 @@ and drawOnScreen, which takes an Array of Html snippets and returns a Dom tree:
 From these bite-size pieces, each responsible for doing its own little job,
 we use compose and map to build up our program:
 
-```
+```js
 //+ prog: Int -> Dom
 prog = compose(drawOnScreen, map(renderRow), getRows);
 ```
@@ -224,15 +228,15 @@ Now shit's about to get realer because we need to fetch the rows asynchronously 
 
 
 Often the callback gets passed to god knows where and is called god knows where.
-```
-getRows :: Int -> ([Row] -> a) -> void
-prog :: Int -> void
+```js
+//+ getRows :: Int -> ([Row] -> a) -> void
+//+ prog :: Int -> void
 prog = getRows(compose(map(drawOnScreen), map(map(renderRow))) //void
 ```
 
 Since getRows returns void we can't compose it in a linear fashion or keep "extending the computation" like we do below
-```
-prog :: Int -> Dom
+```js
+//+ prog :: Int -> Dom
 prog = compose(map(drawOnScreen), map(map(renderRow)), getRows)
 ```
 
@@ -242,11 +246,11 @@ from several external libraries, and Future is one.)
 
 We revise getRows to return a Future of an Array of Rows:
 
-```
+```js
 //+ getRows :: Int -> Future([Row])
 getRows = function(i){
   return new Future(function(reject, resolve) {
-    resolve(i + " rows from the database");
+    resolve(i + ' rows from the database');
   });
 };
 ```
@@ -261,23 +265,22 @@ and our program becomes:
 //+ prog ::                Int                  ->                   Future(Dom)
 ```
 
-```
+```js
 //+ prog :: Int -> Future(Dom)
 prog = compose(map(drawOnScreen), map(map(renderRow)), getRows)
 ```
 
 In a bit we'll cause the Future(Dom) to run its actions and resolve to that Dom object, but first let's unpack this a bit. We've mentioned that map(f) does the same thing conceptually over any Functor: transform the Functor into the corresponding Functor whose underlying value(s) are f(x). But when we say `map(map(renderRow))`, you might ask how HAL knows which map is which. (Besides from reading your lips.)  Map is polymorphic, and if we look at its definition, we'll see how that is implemented:
 
-```
+```js
 map = _.curry(function(f, obj){ return obj.map(f); })
 ```
 
 Map simply delegates to the member function .map on whatever object it receives as its second argument. This allows us to partially apply it with the first argument f. The second argument, the one that determines which .map implementation will be called, is passed in from the right along the chain of composition. So the outer map of `map(map(renderRow))` will receive the Future from getRows, and the inner map will receive the Array of Rows inside the Future:
 
-```
+```js
 //+ map(map(renderRow), future_of_rows) :: Future([Row]) -> Future([Html])
 //+ map(renderRow, rows) :: [Row] -> [Html]
-
 ```
 
 (If you want to hear more about currying, see the talk [Hey Underscore, You're Doing It Wrong!](http://www.youtube.com/watch?v=m3svKOdZijA).
@@ -285,7 +288,7 @@ Map simply delegates to the member function .map on whatever object it receives 
 
 Future has a method `fork` that runs its actions and resolves to its underlying value, so we can invoke our prog like this:
 
-```
+```js
 prog(2).fork(function(err){}, function(result){}) // see folktale
 ```
 
@@ -301,9 +304,9 @@ Now let's see how the laws help us do a bit of refactoring.
 (This comes not from the Functor laws but from the fact that functions form a category; see below):
 
 
-```
+```js
 //+ makePage :: Future([Row]) -> Future(Dom)
-makePage = compose(map(drawOnScreen), map(map(renderRow)));`
+makePage = compose(map(drawOnScreen), map(map(renderRow)));
 
 prog = compose(makePage, getRows);
 ```
@@ -311,7 +314,7 @@ prog = compose(makePage, getRows);
 - we remember our law: `compose(map(f), map(g)) == map(compose(f, g))`, so we factor out a map just like we do in oh, I don't know, ALGEBRA?:
 
 
-```
+```js
 //+ makePage :: Future([Row]) -> Future(Dom)
 makePage = map(compose(drawOnScreen, map(renderRow)));
 
@@ -321,7 +324,7 @@ prog = compose(makePage, getRows);
 - finally we notice we'd rather have makePage work on simpler types than Futures:
 
 
-```
+```js
 //+ makePage :: [Row] -> Dom
 makePage = compose(drawOnScreen, map(renderRow));
 
@@ -332,12 +335,12 @@ prog = compose(map(makePage), getRows);
 
 You will have noticed that as we manipulate functions with map and compose, we are exactly paralleling the way we manipulate variables with addition and multiplication; hence the term *algebra*.
 
-```
+```js
 (x + y) + z == x + (y + z) == add(x, y, z)
 compose(compose(f, g), h) == compose(f, compose(g, h)) == compose(f, g, h)
 ```
 
-```
+```js
 add(mul(2, 4), mul(2,3)) == mul(add(4, 3), 2)
 compose(map(f), map(g)) == map(compose(f, g))
 ```
