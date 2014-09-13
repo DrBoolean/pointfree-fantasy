@@ -281,7 +281,6 @@ Map simply delegates to the member function .map on whatever object it receives 
 ```js
 //+ map(map(renderRow), future_of_rows) :: Future([Row]) -> Future([Html])
 //+ map(renderRow, rows) :: [Row] -> [Html]
-
 ```
 
 (If you want to hear more about currying, see the talk [Hey Underscore, You're Doing It Wrong!](http://www.youtube.com/watch?v=m3svKOdZijA).
