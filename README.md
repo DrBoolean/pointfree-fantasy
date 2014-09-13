@@ -106,8 +106,8 @@ Does it satisfy the Functor laws?
 Let's see how fantasy-land expresses the Functor laws (https://github.com/fantasyland/fantasy-land#functor):
 
 ```js
-u.map(function(a) { return a; }) is equivalent to u (identity)
-u.map(function(x) { return f(g(x)); }) is equivalent to u.map(g).map(f) (composition)
+u.map(function(a) { return a; }) // is equivalent to u (identity)
+u.map(function(x) { return f(g(x)); }) // is equivalent to u.map(g).map(f) (composition)
 ```
 
 You can verify these pretty easily.
