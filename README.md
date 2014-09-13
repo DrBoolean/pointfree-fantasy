@@ -229,14 +229,14 @@ Now shit's about to get realer because we need to fetch the rows asynchronously 
 
 Often the callback gets passed to god knows where and is called god knows where.
 ```
-getRows :: Int -> ([Row] -> a) -> void
-prog :: Int -> void
+//+ getRows :: Int -> ([Row] -> a) -> void
+//+ prog :: Int -> void
 prog = getRows(compose(map(drawOnScreen), map(map(renderRow))) //void
 ```
 
 Since getRows returns void we can't compose it in a linear fashion or keep "extending the computation" like we do below
 ```
-prog :: Int -> Dom
+//+ prog :: Int -> Dom
 prog = compose(map(drawOnScreen), map(map(renderRow)), getRows)
 ```
 
