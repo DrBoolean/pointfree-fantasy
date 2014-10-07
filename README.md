@@ -128,7 +128,7 @@ u.map(id) == u
 u.map(compose(f, g)) == u.map(g).map(f)
 ```
 
-We want to avoid mentioning that u, too! We want to speak of standalone functions, not methods, and so we provide a map function that's NOT defined on Array.prototype. Here's why:
+This is neater, but we also want to avoid mentioning that u! We want to speak of standalone functions, not methods, and so we provide a map function that's NOT defined on Array.prototype. Here's why:
 
 If you have a function that works on a single value and you want to transform it to work on some functor, say Array, you can call map on your function like this: `map(f)`
 
