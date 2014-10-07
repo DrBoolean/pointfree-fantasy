@@ -226,22 +226,6 @@ but in JavaScript it's up to us to manage them. That's why we always try to anno
 
 Now shit's about to get realer because we need to fetch the rows asynchronously from a remote database! For this we're going to use our next Functor: Future. The VALUE of a Future is the actions that will produce the underlying value. That underlying value might an Array of Rows, or it might be the Dom. Once we have our Future, it provides a way to actually run those actions and resolve to the underlying value, but in the meantime we can compose and map until we're satisfied with how we've constructed the pure Future. MAPPING a function f over a Future that will resolve to a value x produces a new Future that will resolve to the value f(x).
 
-*Continuations return null and kind of "disappear" into your app which makes it hard to see the control flow. It also leads to this "pyramid of doom" style or "callback hell" that so many people despise.
-
-
-Often the callback gets passed to god knows where and is called god knows where.
-```js
-//+ getRows :: Int -> ([Row] -> a) -> void
-//+ prog :: Int -> void
-prog = getRows(compose(map(drawOnScreen), map(map(renderRow))) //void
-```
-
-Since getRows returns void we can't compose it in a linear fashion or keep "extending the computation" like we do below
-```js
-//+ prog :: Int -> Dom
-prog = compose(map(drawOnScreen), map(map(renderRow)), getRows)
-```
-
 (Future is defined in folktale's data.future repository (#!https://github.com/folktale/data.future).
 fantasyland-pointfree incorporates functions that work the way we like
 from several external libraries, and Future is one.)
