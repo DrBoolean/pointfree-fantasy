@@ -96,7 +96,9 @@ Take a look at Birch's little list of [things you can map over](http://www.colou
 
 Our most common Functor in JavaScript is Array. Of course Array is normally written as a pair of square brackets around the value(s) it's operating on, but we can imagine it as an explicit function, namely the Array constructor, instead. (Also imagine that the Array constructor does not have special-case behavior when passed a single argument!)
 
-Also note that we're considering Arrays whose contents are all of a single type. The VALUE of an Array is a sequence of values of that underlying type. MAPPING a function f (such as the function "+1") over an Array produces a new Array whose value is a sequence of underlying values, each value equal to f(x), or "+1" of the original. In code: `Array(2,3,4).map(function(n){ return n + 1; }) // Array(3,4,5)`
+Also note that we're considering Arrays whose contents are all of a single type. The VALUE of an Array is a sequence of values of that underlying type. MAPPING a function f (such as the function "+1") over an Array produces a new Array whose value is a sequence of underlying values, each value equal to f(x), or "+1" of the original. In code:
+
+`Array(2,3,4).map(function(n){ return n + 1; }) // Array(3,4,5)`
 
 The fmap function for Array, conveniently, is the similarly-named Array.prototype.map.
 
