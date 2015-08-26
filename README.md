@@ -224,7 +224,7 @@ but in JavaScript it's up to us to manage them. That's why we always try to anno
 
 ----------------------------
 
-Now shit's about to get realer because we need to fetch the rows asynchronously from a remote database! For this we're going to use our next Functor: Future. The VALUE of a Future is the actions that will produce the underlying value. That underlying value might an Array of Rows, or it might be the Dom. Once we have our Future, it provides a way to actually run those actions and resolve to the underlying value, but in the meantime we can compose and map until we're satisfied with how we've constructed the pure Future. MAPPING a function f over a Future that will resolve to a value x produces a new Future that will resolve to the value f(x).
+Now shit's about to get realer because we need to fetch the rows asynchronously from a remote database! For this we're going to use our next Functor: Future. The VALUE of a Future is the actions that will produce the underlying value. That underlying value might be an Array of Rows, or it might be the Dom. Once we have our Future, it provides a way to actually run those actions and resolve to the underlying value, but in the meantime we can compose and map until we're satisfied with how we've constructed the pure Future. MAPPING a function f over a Future that will resolve to a value x produces a new Future that will resolve to the value f(x).
 
 (Future is defined in folktale's data.future repository (#!https://github.com/folktale/data.future).
 fantasyland-pointfree incorporates functions that work the way we like
