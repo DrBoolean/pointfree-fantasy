@@ -78,7 +78,7 @@ We can think of a Functor as a container that implements a map function. So if w
 Container('hello').map(concat(' world')).map(length);
 ```
 
-and wind up with `Container(10)`. As long as each function works on the *content* of the Container, mapping the function over the Container will return a Container with the transformed content.
+and wind up with `Container(11)`. As long as each function works on the *content* of the Container, mapping the function over the Container will return a Container with the transformed content.
 
 Notice that the type of the content will change if the mapped function returns a different type, as with `length` above. So a Functor has to be able to contain any type.
 
