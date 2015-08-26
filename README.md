@@ -78,7 +78,7 @@ We can think of a Functor as a container that implements a map function. So if w
 Container('hello').map(concat(' world')).map(length);
 ```
 
-and wind up with `Container(10)`. As long as each function works on the *content* of the Container, mapping the function over the Container will return a Container with the transformed content.
+and wind up with `Container(11)`. As long as each function works on the *content* of the Container, mapping the function over the Container will return a Container with the transformed content.
 
 Notice that the type of the content will change if the mapped function returns a different type, as with `length` above. So a Functor has to be able to contain any type.
 
@@ -224,7 +224,7 @@ but in JavaScript it's up to us to manage them. That's why we always try to anno
 
 ----------------------------
 
-Now shit's about to get realer because we need to fetch the rows asynchronously from a remote database! For this we're going to use our next Functor: Future. The VALUE of a Future is the actions that will produce the underlying value. That underlying value might an Array of Rows, or it might be the Dom. Once we have our Future, it provides a way to actually run those actions and resolve to the underlying value, but in the meantime we can compose and map until we're satisfied with how we've constructed the pure Future. MAPPING a function f over a Future that will resolve to a value x produces a new Future that will resolve to the value f(x).
+Now shit's about to get realer because we need to fetch the rows asynchronously from a remote database! For this we're going to use our next Functor: Future. The VALUE of a Future is the actions that will produce the underlying value. That underlying value might be an Array of Rows, or it might be the Dom. Once we have our Future, it provides a way to actually run those actions and resolve to the underlying value, but in the meantime we can compose and map until we're satisfied with how we've constructed the pure Future. MAPPING a function f over a Future that will resolve to a value x produces a new Future that will resolve to the value f(x).
 
 (Future is defined in folktale's data.future repository (#!https://github.com/folktale/data.future).
 fantasyland-pointfree incorporates functions that work the way we like
