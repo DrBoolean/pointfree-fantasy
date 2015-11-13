@@ -1,6 +1,6 @@
 {
   "name": "pointfree-fantasy",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Point free wrappers for fantasy land js.",
   "main": "pointfree.js",
   "scripts": {

@@ -88,7 +88,7 @@ var foldMap = curry(function(f, fldable) {
   }, null);
 });
 
-var fold = foldMap(I);
+var fold = curry(function(f, g, x) { return x.fold(f, g) })
 
 var toList = function(x) {
   return x.reduce(function(acc, y) {
