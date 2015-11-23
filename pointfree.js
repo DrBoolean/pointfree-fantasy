@@ -120,6 +120,7 @@ pointy.concat = concat;
 pointy.mappend = concat;
 pointy.mconcat = mconcat;
 pointy.sequenceA = sequenceA;
+pointy.sequence = sequenceA;
 pointy.traverse = traverse;
 pointy.foldMap = foldMap;
 pointy.fold = fold;
