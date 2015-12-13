@@ -37,11 +37,14 @@ var id = function(x) { return x; }
 var K = function(x) { return function(){ return x; } }
 
 var map = curry(function(f, u) {
-  return u.fmap ? u.fmap(f) : u.map(f); //sometimes map passes index so we use fmap if it has it.
+  if(u.fmap) return u.fmap(f); //sometimes map passes index so we use fmap if it has it.
+  if(u.map) return u.map(f);
+  return chain(compose(of(u), f), u);
 });
 
 var ap = curry(function(a1, a2) {
-  return a1.ap(a2);
+  if(a1.ap) return a1.ap(a2);
+  return chain(map(curry.placeholder, a2), a1);
 });
 
 var liftA2 = curry(function(f, x, y) {
@@ -53,7 +56,7 @@ var liftA3 = curry(function(f, x, y, z) {
 });
 
 var chain = curry(function(f, mv) {
-  return mv.chain(f);
+  return mv.chain ? mv.chain(f) : mv.then(f);
 });
 
 var mjoin = function(mmv) {
