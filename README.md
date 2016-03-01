@@ -88,7 +88,7 @@ Or as Julian Birch says:
 
 We haven't mentioned any specific Functors yet. It's the particular things that each different Functor can do that distinguish them from one another. Usually these particular things have to do with how you access the values in the container. The Functor laws, and the clean ways they help us to manipulate Functors, are what all Functors have in common.
 
-Take a look at Birch's little list of [things you can map over](http://www.colourcoding.net/blog/archive/2014/06/27/not-a-haskell-monad-tutorial-functors.aspx).
+Take a look at Birch's little list of [things you can map over](http://web.archive.org/web/20150918214956/http://www.colourcoding.net/blog/archive/2014/06/27/not-a-haskell-monad-tutorial-functors.aspx).
 
 
 -------------------------------
