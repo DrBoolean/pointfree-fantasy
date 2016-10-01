@@ -224,18 +224,18 @@ but in JavaScript it's up to us to manage them. That's why we always try to anno
 
 ----------------------------
 
-Now shit's about to get realer because we need to fetch the rows asynchronously from a remote database! For this we're going to use our next Functor: Future. The VALUE of a Future is the actions that will produce the underlying value. That underlying value might be an Array of Rows, or it might be the Dom. Once we have our Future, it provides a way to actually run those actions and resolve to the underlying value, but in the meantime we can compose and map until we're satisfied with how we've constructed the pure Future. MAPPING a function f over a Future that will resolve to a value x produces a new Future that will resolve to the value f(x).
+Now shit's about to get realer because we need to fetch the rows asynchronously from a remote database! For this we're going to use our next Functor: Task. The VALUE of a Task is the actions that will produce the underlying value. That underlying value might be an Array of Rows, or it might be the Dom. Once we have our Task, it provides a way to actually run those actions and resolve to the underlying value, but in the meantime we can compose and map until we're satisfied with how we've constructed the pure Task. MAPPING a function f over a Task that will resolve to a value x produces a new Task that will resolve to the value f(x).
 
-(Future is defined in folktale's data.future repository (#!https://github.com/folktale/data.future).
+(Task is defined in folktale's data.task repository (https://github.com/folktale/data.task).
 fantasyland-pointfree incorporates functions that work the way we like
-from several external libraries, and Future is one.)
+from several external libraries, and Task is one.)
 
-We revise getRows to return a Future of an Array of Rows:
+We revise getRows to return a Task of an Array of Rows:
 
 ```js
-//+ getRows :: Int -> Future([Row])
+//+ getRows :: Int -> Task([Row])
 getRows = function(i){
-  return new Future(function(reject, resolve) {
+  return new Task(function(reject, resolve) {
     resolve(i + ' rows from the database');
   });
 };
@@ -244,41 +244,41 @@ getRows = function(i){
 and our program becomes:
 
 ```
-//+ getRows ::             Int -> Future([Row])
-//+ map(map(renderRow)) ::        Future([Row]) -> Future([Html])
-//+ map(drawOnScreen) ::                           Future([Html]) -> Future(Dom)
+//+ getRows ::             Int -> Task([Row])
+//+ map(map(renderRow)) ::        Task([Row]) -> Task([Html])
+//+ map(drawOnScreen) ::                         Task([Html]) -> Task(Dom)
 //------------------------------------------------------------------------------
-//+ prog ::                Int                  ->                   Future(Dom)
+//+ prog ::                Int                ->                 Task(Dom)
 ```
 
 ```js
-//+ prog :: Int -> Future(Dom)
+//+ prog :: Int -> Task(Dom)
 prog = compose(map(drawOnScreen), map(map(renderRow)), getRows)
 ```
 
-In a bit we'll cause the Future(Dom) to run its actions and resolve to that Dom object, but first let's unpack this a bit. We've mentioned that map(f) does the same thing conceptually over any Functor: transform the Functor into the corresponding Functor whose underlying value(s) are f(x). But when we say `map(map(renderRow))`, you might ask how HAL knows which map is which. (Besides from reading your lips.)  Map is polymorphic, and if we look at its definition, we'll see how that is implemented:
+In a bit we'll cause the Task(Dom) to run its actions and resolve to that Dom object, but first let's unpack this a bit. We've mentioned that map(f) does the same thing conceptually over any Functor: transform the Functor into the corresponding Functor whose underlying value(s) are f(x). But when we say `map(map(renderRow))`, you might ask how HAL knows which map is which. (Besides from reading your lips.)  Map is polymorphic, and if we look at its definition, we'll see how that is implemented:
 
 ```js
 map = _.curry(function(f, obj){ return obj.map(f); })
 ```
 
-Map simply delegates to the member function .map on whatever object it receives as its second argument. This allows us to partially apply it with the first argument f. The second argument, the one that determines which .map implementation will be called, is passed in from the right along the chain of composition. So the outer map of `map(map(renderRow))` will receive the Future from getRows, and the inner map will receive the Array of Rows inside the Future:
+Map simply delegates to the member function .map on whatever object it receives as its second argument. This allows us to partially apply it with the first argument f. The second argument, the one that determines which .map implementation will be called, is passed in from the right along the chain of composition. So the outer map of `map(map(renderRow))` will receive the Task from getRows, and the inner map will receive the Array of Rows inside the Task:
 
 ```js
-//+ map(map(renderRow), future_of_rows) :: Future([Row]) -> Future([Html])
+//+ map(map(renderRow), future_of_rows) :: Task([Row]) -> Task([Html])
 //+ map(renderRow, rows) :: [Row] -> [Html]
 ```
 
 (If you want to hear more about currying, see the talk [Hey Underscore, You're Doing It Wrong!](http://www.youtube.com/watch?v=m3svKOdZijA).
 
 
-Future has a method `fork` that runs its actions and resolves to its underlying value, so we can invoke our prog like this:
+Task has a method `fork` that runs its actions and resolves to its underlying value, so we can invoke our prog like this:
 
 ```js
 prog(2).fork(function(err){}, function(result){}) // see folktale
 ```
 
-and the page displaying two rows will be drawn when the Future's underlying value is realized.
+and the page displaying two rows will be drawn when the Task's underlying value is realized.
 
 
 
@@ -291,7 +291,7 @@ Now let's see how the laws help us do a bit of refactoring.
 
 
 ```js
-//+ makePage :: Future([Row]) -> Future(Dom)
+//+ makePage :: Task([Row]) -> Task(Dom)
 makePage = compose(map(drawOnScreen), map(map(renderRow)));
 
 prog = compose(makePage, getRows);
@@ -301,13 +301,13 @@ prog = compose(makePage, getRows);
 
 
 ```js
-//+ makePage :: Future([Row]) -> Future(Dom)
+//+ makePage :: Task([Row]) -> Task(Dom)
 makePage = map(compose(drawOnScreen, map(renderRow)));
 
 prog = compose(makePage, getRows);
 ```
 
-- finally we notice we'd rather have makePage work on simpler types than Futures:
+- finally we notice we'd rather have makePage work on simpler types than Tasks:
 
 
 ```js
