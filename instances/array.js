@@ -59,7 +59,7 @@ Object.defineProperty(Array.prototype, 'ap',{
 
 var _traverse = function(f, point) {
   var cons_f = function(ys, x){
-    return f(x).map(function(x){ return function(y){ return y.concat(x); } }).ap(ys);
+    return f(x).map(function(x){ return function(y){ var t = y.concat(); t.push(x); return t; } }).ap(ys);
   }
   return this.reduce(cons_f, point([]));
 };

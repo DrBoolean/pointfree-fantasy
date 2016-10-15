@@ -28,4 +28,11 @@ describe('Array', function(){
   it('is foldable', function() {
     assert.deepEqual(foldMap(monoids.Sum, [1,2,3]), monoids.Sum(6))
   });
+
+  it('is traversable if function return an array', function () {
+    var f = function(x){ return Maybe([x]); }
+    var xs = [1,2];
+    assert.deepEqual(traverse(f, Maybe.of, xs), Maybe([[1],[2]]));
+  })
+
 });
