@@ -22,7 +22,7 @@ Sum.prototype.ap = function(s2) {
 	return Sum(ap(this.val, s2.val));
 };
 
-Sum.prototype.chaim = function(f) {
+Sum.prototype.chain = function(f) {
 	return f(this.val);
 };
 
